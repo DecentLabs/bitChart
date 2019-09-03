@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Scheme
+   LastUpgradeVersion = "1030"
+   version = "1.3">
+   <BuildAction
+      parallelizeBuildables = "YES"
+      buildImplicitDependencies = "YES">
+      <BuildActionEntries>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "7A84A8AE231D4FF900502BA1"
+               BuildableName = "bitChart.app"
+               BlueprintName = "bitChart"
+               ReferencedContainer = "container:bitChart.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+      </BuildActionEntries>
+   </BuildAction>
+   <TestAction
+      buildConfiguration = "Debug"
+      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      shouldUseLaunchSchemeArgsEnv = "YES">
+      <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "7A84A8C2231D4FFB00502BA1"
+               BuildableName = "bitChartTests.xctest"
+               BlueprintName = "bitChartTests"
+               ReferencedContainer = "container:bitChart.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "7A84A8CD231D4FFB00502BA1"
+               BuildableName = "bitChartUITests.xctest"
+               BlueprintName = "bitChartUITests"
+               ReferencedContainer = "container:bitChart.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+      </Testables>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "7A84A8AE231D4FF900502BA1"
+            BuildableName = "bitChart.app"
+            BlueprintName = "bitChart"
+            ReferencedContainer = "container:bitChart.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
+      <AdditionalOptions>
+      </AdditionalOptions>
+   </TestAction>
+   <LaunchAction
+      buildConfiguration = "Debug"
+      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      launchStyle = "0"
+      useCustomWorkingDirectory = "NO"
+      ignoresPersistentStateOnLaunch = "NO"
+      debugDocumentVersioning = "YES"
+      debugServiceExtension = "internal"
+      allowLocationSimulation = "YES">
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "7A84A8AE231D4FF900502BA1"
+            BuildableName = "bitChart.app"
+            BlueprintName = "bitChart"
+            ReferencedContainer = "container:bitChart.xcodeproj">
+         </BuildableReference>
+      </BuildableProductRunnable>
+      <EnvironmentVariables>
+         <EnvironmentVariable
+            key = "SCICHART_LICENSE"
+            value = "e7828f26dfde804d183b906850789bf0fc41e82f362a5cdfcb370cfb75a09fa5521ca89586e9798d0862bb6a44dfc1c2ac6c7e3f56e505de330aee147ad41d429df4c6c0cc131c0cba4d44eee6670c6399e3478cdf880053aa53998b35cfb8be1d9a674889201a627c98805309a5971ee37afd1d7df145d3439fef58225d2e8abe4a8a39740aa41fc502520bf45ec2c0f78d5a7213075f045c2e4b9b0746c281623d4a431e0640b6ae3337ecb89d15"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+      </EnvironmentVariables>
+      <AdditionalOptions>
+      </AdditionalOptions>
+   </LaunchAction>
+   <ProfileAction
+      buildConfiguration = "Release"
+      shouldUseLaunchSchemeArgsEnv = "YES"
+      savedToolIdentifier = ""
+      useCustomWorkingDirectory = "NO"
+      debugDocumentVersioning = "YES">
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "7A84A8AE231D4FF900502BA1"
+            BuildableName = "bitChart.app"
+            BlueprintName = "bitChart"
+            ReferencedContainer = "container:bitChart.xcodeproj">
+         </BuildableReference>
+      </BuildableProductRunnable>
+   </ProfileAction>
+   <AnalyzeAction
+      buildConfiguration = "Debug">
+   </AnalyzeAction>
+   <ArchiveAction
+      buildConfiguration = "Release"
+      revealArchiveInOrganizer = "YES">
+   </ArchiveAction>
+</Scheme>

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -14,6 +14,9 @@
 		7A84A8BD231D4FFA00502BA1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7A84A8BB231D4FFA00502BA1 /* LaunchScreen.storyboard */; };
 		7A84A8C8231D4FFB00502BA1 /* bitChartTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A84A8C7231D4FFB00502BA1 /* bitChartTests.swift */; };
 		7A84A8D3231D4FFB00502BA1 /* bitChartUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A84A8D2231D4FFB00502BA1 /* bitChartUITests.swift */; };
+		7AB1D5C4231D5D2500A430C2 /* SciChart.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AB1D5C3231D5D2500A430C2 /* SciChart.framework */; };
+		7AB1D5C5231D5D2500A430C2 /* SciChart.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7AB1D5C3231D5D2500A430C2 /* SciChart.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		7AB1D5C8231D5E2C00A430C2 /* SCIGenericWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB1D5C7231D5E2C00A430C2 /* SCIGenericWrapper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -33,9 +36,24 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		7AB1D5C6231D5D2500A430C2 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				7AB1D5C5231D5D2500A430C2 /* SciChart.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		5F127A3FFB8F8246736934D4 /* Pods_bitChart.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_bitChart.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A84A8AF231D4FF900502BA1 /* bitChart.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = bitChart.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		7A84A8B2231D4FF900502BA1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		7A84A8B2231D4FF900502BA1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; usesTabs = 1; };
 		7A84A8B4231D4FF900502BA1 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		7A84A8B7231D4FF900502BA1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		7A84A8B9231D4FFA00502BA1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -47,6 +65,11 @@
 		7A84A8CE231D4FFB00502BA1 /* bitChartUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = bitChartUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A84A8D2231D4FFB00502BA1 /* bitChartUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = bitChartUITests.swift; sourceTree = "<group>"; };
 		7A84A8D4231D4FFB00502BA1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7AB1D5B7231D53DC00A430C2 /* SciChart.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SciChart.framework; path = ../../SciChart_iOS_v2.5.0.2523_SDK/SciChart.framework; sourceTree = "<group>"; };
+		7AB1D5C3231D5D2500A430C2 /* SciChart.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SciChart.framework; sourceTree = "<group>"; };
+		7AB1D5C7231D5E2C00A430C2 /* SCIGenericWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SCIGenericWrapper.swift; path = SciChart.framework/SwiftUtil/SCIGenericWrapper.swift; sourceTree = "<group>"; };
+		9A4E2FA6E476B127D6D98AEC /* Pods-bitChart.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bitChart.release.xcconfig"; path = "Target Support Files/Pods-bitChart/Pods-bitChart.release.xcconfig"; sourceTree = "<group>"; };
+		9F1AC4CB03EA424917377C13 /* Pods-bitChart.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bitChart.debug.xcconfig"; path = "Target Support Files/Pods-bitChart/Pods-bitChart.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +77,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7AB1D5C4231D5D2500A430C2 /* SciChart.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -74,13 +98,26 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		09624F12C000B4E5ACB963E5 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				9F1AC4CB03EA424917377C13 /* Pods-bitChart.debug.xcconfig */,
+				9A4E2FA6E476B127D6D98AEC /* Pods-bitChart.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		7A84A8A6231D4FF900502BA1 = {
 			isa = PBXGroup;
 			children = (
+				7AB1D5C7231D5E2C00A430C2 /* SCIGenericWrapper.swift */,
+				7AB1D5C3231D5D2500A430C2 /* SciChart.framework */,
 				7A84A8B1231D4FF900502BA1 /* bitChart */,
 				7A84A8C6231D4FFB00502BA1 /* bitChartTests */,
 				7A84A8D1231D4FFB00502BA1 /* bitChartUITests */,
 				7A84A8B0231D4FF900502BA1 /* Products */,
+				09624F12C000B4E5ACB963E5 /* Pods */,
+				C139504145532864D881186A /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -125,6 +162,15 @@
 			path = bitChartUITests;
 			sourceTree = "<group>";
 		};
+		C139504145532864D881186A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				7AB1D5B7231D53DC00A430C2 /* SciChart.framework */,
+				5F127A3FFB8F8246736934D4 /* Pods_bitChart.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -132,9 +178,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7A84A8D7231D4FFB00502BA1 /* Build configuration list for PBXNativeTarget "bitChart" */;
 			buildPhases = (
+				BFB217E7DC3EED3CD88113A8 /* [CP] Check Pods Manifest.lock */,
 				7A84A8AB231D4FF900502BA1 /* Sources */,
 				7A84A8AC231D4FF900502BA1 /* Frameworks */,
 				7A84A8AD231D4FF900502BA1 /* Resources */,
+				EA7324CD43DF1C4659D9BE6A /* [CP] Embed Pods Frameworks */,
+				7AB1D5C6231D5D2500A430C2 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -251,11 +300,54 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		BFB217E7DC3EED3CD88113A8 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-bitChart-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		EA7324CD43DF1C4659D9BE6A /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-bitChart/Pods-bitChart-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-bitChart/Pods-bitChart-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-bitChart/Pods-bitChart-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		7A84A8AB231D4FF900502BA1 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7AB1D5C8231D5E2C00A430C2 /* SCIGenericWrapper.swift in Sources */,
 				7A84A8B5231D4FF900502BA1 /* ViewController.swift in Sources */,
 				7A84A8B3231D4FF900502BA1 /* AppDelegate.swift in Sources */,
 			);
@@ -430,10 +522,15 @@
 		};
 		7A84A8D8231D4FFB00502BA1 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9F1AC4CB03EA424917377C13 /* Pods-bitChart.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = S48UGZCQYC;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = bitChart/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -448,10 +545,15 @@
 		};
 		7A84A8D9231D4FFB00502BA1 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9A4E2FA6E476B127D6D98AEC /* Pods-bitChart.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = S48UGZCQYC;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = bitChart/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

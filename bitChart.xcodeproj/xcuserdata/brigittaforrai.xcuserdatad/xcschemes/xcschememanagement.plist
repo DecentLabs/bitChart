@@ -7,7 +7,25 @@
 		<key>bitChart.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>0</integer>
+			<integer>2</integer>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>7A84A8AE231D4FF900502BA1</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>7A84A8C2231D4FFB00502BA1</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>7A84A8CD231D4FFB00502BA1</key>
+		<dict>
+			<key>primary</key>
+			<true/>
 		</dict>
 	</dict>
 </dict>

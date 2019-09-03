@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import SciChart
+import Foundation
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -16,6 +18,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        // Note! This is just an example.
+        // The real License Contract is found by following steps above
+        let licenseCode:String = ProcessInfo.processInfo.environment["SCICHART_LICENSE"] ?? ""
+        let licencing:String = "<LicenseContract>" +
+            "<Customer>brigittaforrai@decent.org</Customer>" +
+            "<OrderId>Trial</OrderId>" +
+            "<LicenseCount>1</LicenseCount>" +
+            "<IsTrialLicense>true</IsTrialLicense>" +
+            "<SupportExpires>10/02/2019 00:00:00</SupportExpires>" +
+            "<ProductCode>SC-IOS-2D-ENTERPRISE-SRC</ProductCode>" +
+        "<KeyCode>" + licenseCode + "</KeyCode>" +
+        "</LicenseContract>"
+        
+        SCIChartSurface.setRuntimeLicenseKey(licencing)
         return true
     }
 
