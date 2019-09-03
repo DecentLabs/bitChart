@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7A20E367231EAE3400716936 /* chart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A20E366231EAE3400716936 /* chart.swift */; };
+		7A20E369231EB3A200716936 /* transformData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A20E368231EB3A200716936 /* transformData.swift */; };
 		7A84A8B3231D4FF900502BA1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A84A8B2231D4FF900502BA1 /* AppDelegate.swift */; };
 		7A84A8B5231D4FF900502BA1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A84A8B4231D4FF900502BA1 /* ViewController.swift */; };
 		7A84A8B8231D4FF900502BA1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7A84A8B6231D4FF900502BA1 /* Main.storyboard */; };
@@ -17,6 +19,7 @@
 		7AB1D5C4231D5D2500A430C2 /* SciChart.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AB1D5C3231D5D2500A430C2 /* SciChart.framework */; };
 		7AB1D5C5231D5D2500A430C2 /* SciChart.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7AB1D5C3231D5D2500A430C2 /* SciChart.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7AB1D5C8231D5E2C00A430C2 /* SCIGenericWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB1D5C7231D5E2C00A430C2 /* SCIGenericWrapper.swift */; };
+		7AB1D5CA231E78B700A430C2 /* orderbook.csv in Resources */ = {isa = PBXBuildFile; fileRef = 7AB1D5C9231E78B700A430C2 /* orderbook.csv */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +55,8 @@
 
 /* Begin PBXFileReference section */
 		5F127A3FFB8F8246736934D4 /* Pods_bitChart.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_bitChart.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7A20E366231EAE3400716936 /* chart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = chart.swift; sourceTree = "<group>"; };
+		7A20E368231EB3A200716936 /* transformData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = transformData.swift; sourceTree = "<group>"; };
 		7A84A8AF231D4FF900502BA1 /* bitChart.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = bitChart.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A84A8B2231D4FF900502BA1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; usesTabs = 1; };
 		7A84A8B4231D4FF900502BA1 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -68,6 +73,7 @@
 		7AB1D5B7231D53DC00A430C2 /* SciChart.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SciChart.framework; path = ../../SciChart_iOS_v2.5.0.2523_SDK/SciChart.framework; sourceTree = "<group>"; };
 		7AB1D5C3231D5D2500A430C2 /* SciChart.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SciChart.framework; sourceTree = "<group>"; };
 		7AB1D5C7231D5E2C00A430C2 /* SCIGenericWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SCIGenericWrapper.swift; path = SciChart.framework/SwiftUtil/SCIGenericWrapper.swift; sourceTree = "<group>"; };
+		7AB1D5C9231E78B700A430C2 /* orderbook.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = orderbook.csv; sourceTree = "<group>"; };
 		9A4E2FA6E476B127D6D98AEC /* Pods-bitChart.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bitChart.release.xcconfig"; path = "Target Support Files/Pods-bitChart/Pods-bitChart.release.xcconfig"; sourceTree = "<group>"; };
 		9F1AC4CB03EA424917377C13 /* Pods-bitChart.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bitChart.debug.xcconfig"; path = "Target Support Files/Pods-bitChart/Pods-bitChart.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -134,12 +140,15 @@
 		7A84A8B1231D4FF900502BA1 /* bitChart */ = {
 			isa = PBXGroup;
 			children = (
+				7AB1D5C9231E78B700A430C2 /* orderbook.csv */,
 				7A84A8B2231D4FF900502BA1 /* AppDelegate.swift */,
 				7A84A8B4231D4FF900502BA1 /* ViewController.swift */,
 				7A84A8B6231D4FF900502BA1 /* Main.storyboard */,
 				7A84A8B9231D4FFA00502BA1 /* Assets.xcassets */,
 				7A84A8BB231D4FFA00502BA1 /* LaunchScreen.storyboard */,
 				7A84A8BE231D4FFA00502BA1 /* Info.plist */,
+				7A20E366231EAE3400716936 /* chart.swift */,
+				7A20E368231EB3A200716936 /* transformData.swift */,
 			);
 			path = bitChart;
 			sourceTree = "<group>";
@@ -280,6 +289,7 @@
 			files = (
 				7A84A8BD231D4FFA00502BA1 /* LaunchScreen.storyboard in Resources */,
 				7A84A8BA231D4FFA00502BA1 /* Assets.xcassets in Resources */,
+				7AB1D5CA231E78B700A430C2 /* orderbook.csv in Resources */,
 				7A84A8B8231D4FF900502BA1 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -347,9 +357,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7A20E367231EAE3400716936 /* chart.swift in Sources */,
 				7AB1D5C8231D5E2C00A430C2 /* SCIGenericWrapper.swift in Sources */,
 				7A84A8B5231D4FF900502BA1 /* ViewController.swift in Sources */,
 				7A84A8B3231D4FF900502BA1 /* AppDelegate.swift in Sources */,
+				7A20E369231EB3A200716936 /* transformData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

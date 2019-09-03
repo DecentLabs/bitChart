@@ -8,6 +8,8 @@
 
 import UIKit
 import SciChart
+import Foundation
+
 
 class ViewController: UIViewController {
     
@@ -15,21 +17,23 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        
+        // get data from csv
+        let data = getData()
+        
+        let dates = data["dates"]
+        let bidPrices = data["bidPrices"]
+        let askPrices = data["askPrices"]
         
         // Create a SCIChartSurface. This is a UIView so can be added directly to the UI
         sciChartSurface = SCIChartSurface(frame: self.view.bounds)
         sciChartSurface?.translatesAutoresizingMaskIntoConstraints = true
-        
         // Add the SCIChartSurface as a subview
         self.view.addSubview(sciChartSurface!)
         
-        // Create an XAxis and YAxis. This step is mandatory before creating series
-        sciChartSurface?.xAxes.add(SCINumericAxis())
-        sciChartSurface?.yAxes.add(SCINumericAxis())
-        // That's it! The SCIChartSurface will now display on the screen with default axis ranges
+        // set chart
+        sciChartSurface = setChart(sciChartSurface: sciChartSurface!, dates: dates!, bidPrices: bidPrices!, askPrices: askPrices!)
     }
-
-
 }
+
 
