@@ -19,21 +19,21 @@ func setChart (
     let xAxis = SCIDateTimeAxis()
     let yAxis = SCINumericAxis()
     
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSSZ"  // csv format: 2018-03-16T00:53:18.2010346Z
+    
     // todo
-    //let minXRange = Date()
-    //let maxXRange = minXRange.addingTimeInterval(6000) as Date
+    //let minXRange = dateFormatter.date(from: dates[0]) ?? nil
+    //let maxXRange = dateFormatter.date(from: dates[dates.count - 1]) ?? nil
     //xAxis.visibleRange = SCIDateRange(dateMin: minXRange, max: maxXRange)
     
-    xAxis.growBy = SCIDoubleRange(min: SCIGeneric(0.1), max: SCIGeneric(0.1))
-    xAxis.textFormatting = "HH:mm:ss"
+    // xAxis.growBy = SCIDoubleRange(min: SCIGeneric(0.1), max: SCIGeneric(0.1))
+    xAxis.textFormatting = "dd MMM yyyy, HH:mm:ss"
     
     xAxis.axisTitle = "Date"
     yAxis.axisTitle = "Bid Prices"
     
     let dataSeries = SCIXyDataSeries(xType: .dateTime, yType: .float)
-    
-    let dateFormatter = DateFormatter()
-    dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.MsZ"  // csv format: 2018-03-16T00:53:18.2010346Z
     
     
     for i in 0..<dates.count {
@@ -45,7 +45,7 @@ func setChart (
     
     
     let lineRenderSeries = SCIFastLineRenderableSeries()
-    //lineRenderSeries.strokeStyle = SCISolidPenStyle(colorCode: 0xff279b27, withThickness: 1.0)
+    lineRenderSeries.strokeStyle = SCISolidPenStyle(colorCode: 0xff279b27, withThickness: 1.0)
     lineRenderSeries.dataSeries = dataSeries
     
     // Create an XAxis and YAxis. This step is mandatory before creating series
