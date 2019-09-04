@@ -22,36 +22,51 @@ func setChart (
     let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSSZ"  // csv format: 2018-03-16T00:53:18.2010346Z
     
-    // todo
-    //let minXRange = dateFormatter.date(from: dates[0]) ?? nil
-    //let maxXRange = dateFormatter.date(from: dates[dates.count - 1]) ?? nil
-    //xAxis.visibleRange = SCIDateRange(dateMin: minXRange, max: maxXRange)
+    // default visible x range
+    let minXRange = dateFormatter.date(from: dates[dates.count / 3]) ?? nil
+    let maxXRange = dateFormatter.date(from: dates[(dates.count / 3) * 2]) ?? nil
+    xAxis.visibleRange = SCIDateRange(dateMin: minXRange, max: maxXRange)
     
     // xAxis.growBy = SCIDoubleRange(min: SCIGeneric(0.1), max: SCIGeneric(0.1))
     xAxis.textFormatting = "dd MMM yyyy, HH:mm:ss"
     
     xAxis.axisTitle = "Date"
-    yAxis.axisTitle = "Bid Prices"
+    yAxis.axisTitle = "Prices"
     
-    let dataSeries = SCIXyDataSeries(xType: .dateTime, yType: .float)
+    let dataSeries_bids = SCIXyDataSeries(xType: .dateTime, yType: .float)
+    let dataSeries_asks = SCIXyDataSeries(xType: .dateTime, yType: .float)
     
     
     for i in 0..<dates.count {
         let date = dates[i]
         let x: Date = dateFormatter.date(from: date) ?? Date() // todo
-        let y: Float = (bidPrices[i] as NSString).floatValue
-        dataSeries.appendX(SCIGeneric(x), y: SCIGeneric(y))
+        let bid: Float = (bidPrices[i] as NSString).floatValue
+        let ask: Float = (askPrices[i] as NSString).floatValue
+        dataSeries_bids.appendX(SCIGeneric(x), y: SCIGeneric(bid))
+        dataSeries_asks.appendX(SCIGeneric(x), y: SCIGeneric(ask))
     }
     
     
-    let lineRenderSeries = SCIFastLineRenderableSeries()
-    lineRenderSeries.strokeStyle = SCISolidPenStyle(colorCode: 0xff279b27, withThickness: 1.0)
-    lineRenderSeries.dataSeries = dataSeries
+    let lineRenderSeries_bids = SCIFastLineRenderableSeries()
+    lineRenderSeries_bids.strokeStyle = SCISolidPenStyle(colorCode: 0xffeb4034, withThickness: 0.5)
+    lineRenderSeries_bids.dataSeries = dataSeries_bids
+    
+    let lineRenderSeries_asks = SCIFastLineRenderableSeries()
+    lineRenderSeries_asks.strokeStyle = SCISolidPenStyle(colorCode: 0xff34bdeb, withThickness: 0.5)
+    lineRenderSeries_asks.dataSeries = dataSeries_asks
     
     // Create an XAxis and YAxis. This step is mandatory before creating series
     sciChartSurface.xAxes.add(xAxis)
     sciChartSurface.yAxes.add(yAxis)
-    sciChartSurface.renderableSeries.add(lineRenderSeries)
+    sciChartSurface.renderableSeries.add(lineRenderSeries_bids)
+    sciChartSurface.renderableSeries.add(lineRenderSeries_asks)
+    
+    // add pan and zoom modifiers
+    sciChartSurface.chartModifiers = SCIChartModifierCollection(childModifiers: [
+        SCIPinchZoomModifier(),
+        SCIZoomPanModifier(),
+        SCIZoomExtentsModifier()
+    ])
 
     return sciChartSurface
 }
