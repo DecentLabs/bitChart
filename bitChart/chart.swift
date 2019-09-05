@@ -11,17 +11,20 @@ import SciChart
 
 func setChart (
         sciChartSurface: SCIChartSurface,
-        dates: [String],
-        bidPrices: [String],
-        askPrices: [String]
+        data: Data
     ) -> SCIChartSurface {
-    
+
+    let dates = data.dates
+    let bidPrices = data.bidPrices
+    let askPrices = data.askPrices
+
     let xAxis = SCIDateTimeAxis()
     let yAxis = SCINumericAxis()
     
     let dateFormatter = DateFormatter()
-    dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSSZ"  // csv format: 2018-03-16T00:53:18.2010346Z
-    
+    // csv format: 2018-03-16T00:53:18.2010346Z
+    dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSSZ"
+
     // default visible x range
     let minXRange = dateFormatter.date(from: dates[dates.count / 3]) ?? nil
     let maxXRange = dateFormatter.date(from: dates[(dates.count / 3) * 2]) ?? nil
@@ -40,8 +43,8 @@ func setChart (
     for i in 0..<dates.count {
         let date = dates[i]
         let x: Date = dateFormatter.date(from: date) ?? Date() // todo
-        let bid: Float = (bidPrices[i] as NSString).floatValue
-        let ask: Float = (askPrices[i] as NSString).floatValue
+        let bid: Float = bidPrices[i]
+        let ask: Float = askPrices[i]
         dataSeries_bids.appendX(SCIGeneric(x), y: SCIGeneric(bid))
         dataSeries_asks.appendX(SCIGeneric(x), y: SCIGeneric(ask))
     }

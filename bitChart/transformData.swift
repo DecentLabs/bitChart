@@ -8,14 +8,19 @@
 
 import Foundation
 
+struct Data {
+    var dates: [String]
+    var askPrices: [Float]
+    var bidPrices: [Float]
+}
 
-func getData() -> [String: [String]] {
+func getData() -> Data {
     
     var data = readDataFromCSV(fileName: "orderbook", fileType: "csv")
     data = cleanRows(file: data!)
     
-    var askPrices: [String] = []
-    var bidPrices: [String] = []
+    var askPrices: [Float] = []
+    var bidPrices: [Float] = []
     var dates: [String] = []
     
     let rows = data!.components(separatedBy: "\n")
@@ -25,17 +30,13 @@ func getData() -> [String: [String]] {
         let columns = row.components(separatedBy: ",")
         
         if (counter != 0 && columns.count > 4) {
-            askPrices.append(columns[2])
-            bidPrices.append(columns[4])
+            askPrices.append((columns[2] as NSString).floatValue)
+            bidPrices.append((columns[4] as NSString).floatValue)
             dates.append(columns[1])
         }
         counter += 1
     }
-    return [
-        "askPrices": askPrices,
-        "bidPrices": bidPrices,
-        "dates": dates
-    ]
+    return Data(dates: dates, askPrices: askPrices, bidPrices: bidPrices)
 }
 
 

@@ -20,11 +20,7 @@ class ViewController: UIViewController {
         
         // get data from csv
         let data = getData()
-        
-        let dates = data["dates"]
-        let bidPrices = data["bidPrices"]
-        let askPrices = data["askPrices"]
-        
+
         // Create a SCIChartSurface. This is a UIView so can be added directly to the UI
         sciChartSurface = SCIChartSurface(frame: self.view.bounds)
         sciChartSurface?.translatesAutoresizingMaskIntoConstraints = true
@@ -32,7 +28,7 @@ class ViewController: UIViewController {
         self.view.addSubview(sciChartSurface!)
         
         // set chart
-        sciChartSurface = setChart(sciChartSurface: sciChartSurface!, dates: dates!, bidPrices: bidPrices!, askPrices: askPrices!)
+        sciChartSurface = setChart(sciChartSurface: sciChartSurface!, data: data)
     }
 }
 
