@@ -22,13 +22,19 @@ class ViewController: UIViewController {
         let data = getData()
 
         // Create a SCIChartSurface. This is a UIView so can be added directly to the UI
-        sciChartSurface = SCIChartSurface(frame: self.view.bounds)
-        sciChartSurface?.translatesAutoresizingMaskIntoConstraints = true
+        let surface = SCIChartSurface(frame: self.view.bounds)
+
+        if SCIChartSurface.isMetalSupported {
+            surface.renderSurface = SCIMetalRenderSurface(frame: surface.bounds)
+        }
+
+        surface.translatesAutoresizingMaskIntoConstraints = true
+
         // Add the SCIChartSurface as a subview
-        self.view.addSubview(sciChartSurface!)
+        self.view.addSubview(surface)
         
         // set chart
-        sciChartSurface = setChart(sciChartSurface: sciChartSurface!, data: data)
+        sciChartSurface = setChart(sciChartSurface: surface, data: data)
     }
 }
 
