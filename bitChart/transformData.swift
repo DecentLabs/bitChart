@@ -8,34 +8,52 @@
 
 import Foundation
 
+struct Result {
+    let dates: [Date]
+    let data: [[Float]]
+}
 
-func getData() -> [String: [String]] {
+func getData() -> Result {
     
+    // parse csv
     var data = readDataFromCSV(fileName: "orderbook", fileType: "csv")
     data = cleanRows(file: data!)
+    let stringRows = data!.components(separatedBy: "\n")
     
-    var askPrices: [String] = []
-    var bidPrices: [String] = []
-    var dates: [String] = []
+    var dataRows: [[String]] = []
     
-    let rows = data!.components(separatedBy: "\n")
-    var counter = 0
-    
-    for row in rows {
-        let columns = row.components(separatedBy: ",")
-        
-        if (counter != 0 && columns.count > 4) {
-            askPrices.append(columns[2])
-            bidPrices.append(columns[4])
-            dates.append(columns[1])
+    for (i, row) in stringRows.enumerated() {
+        let column = row.components(separatedBy: ",")
+        if (i != 0) {
+            dataRows.append(column)
         }
-        counter += 1
     }
-    return [
-        "askPrices": askPrices,
-        "bidPrices": bidPrices,
-        "dates": dates
-    ]
+    
+    let count = dataRows[0].count
+    let empty : [Float] = []
+    var dates: [Date] = []
+    var floats = Array(repeating: empty, count: count - 2)
+    
+    
+    // sort by columns
+    for r in dataRows {
+        for (i, c) in r.enumerated() {
+            // separate float data
+            if (i > 1) {
+                let data = (c as NSString).floatValue
+                floats[i-2].append(data)
+            }
+            // separate dates
+            if (i == 1) {
+                let d = stringToDate(string: c)
+                dates.append(d)
+            }
+        }
+    }
+    
+    
+    let result = Result(dates: dates, data: floats)
+    return result
 }
 
 
