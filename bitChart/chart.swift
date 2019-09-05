@@ -21,13 +21,9 @@ func setChart (
     let xAxis = SCIDateTimeAxis()
     let yAxis = SCINumericAxis()
     
-    let dateFormatter = DateFormatter()
-    // csv format: 2018-03-16T00:53:18.2010346Z
-    dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSSZ"
-
     // default visible x range
-    let minXRange = dateFormatter.date(from: dates[dates.count / 3]) ?? nil
-    let maxXRange = dateFormatter.date(from: dates[(dates.count / 3) * 2]) ?? nil
+    let minXRange = dates[dates.count / 3]
+    let maxXRange = dates[(dates.count / 3) * 2]
     xAxis.visibleRange = SCIDateRange(dateMin: minXRange, max: maxXRange)
     
     // xAxis.growBy = SCIDoubleRange(min: SCIGeneric(0.1), max: SCIGeneric(0.1))
@@ -41,8 +37,7 @@ func setChart (
     
     
     for i in 0..<dates.count {
-        let date = dates[i]
-        let x: Date = dateFormatter.date(from: date) ?? Date() // todo
+        let x: Date = dates[i]
         let bid: Float = bidPrices[i]
         let ask: Float = askPrices[i]
         dataSeries_bids.appendX(SCIGeneric(x), y: SCIGeneric(bid))
