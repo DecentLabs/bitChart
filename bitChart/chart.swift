@@ -11,20 +11,18 @@ import SciChart
 
 func setChart (
         sciChartSurface: SCIChartSurface,
-        dates: [Date],
-        bidPrices: [Float],
-        askPrices: [Float]
+        data: [OrderBook]
     ) -> SCIChartSurface {
     
     let xAxis = SCIDateTimeAxis()
     let yAxis = SCINumericAxis()
 
     // default visible x range
-    xAxis.visibleRange = SCIDateRange(dateMin: dates.first, max: dates.last)
+    xAxis.visibleRange = SCIDateRange(dateMin: data.first?.timestamp, max: data.last?.timestamp)
     
     // default visible y range
-    let minYRange = bidPrices.min()!
-    let maxYRange = bidPrices.max()!
+    let minYRange = data.map({$0.bids.first!.price}).min()!
+    let maxYRange = data.map({$0.asks.first!.price}).max()!
     yAxis.visibleRangeLimit = SCIDoubleRange(min: SCIGeneric(minYRange), max: SCIGeneric(maxYRange))
     
 

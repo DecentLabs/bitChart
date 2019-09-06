@@ -10,21 +10,15 @@ import Foundation
 import SciChart
 
 func createLinechart (sciChartSurface: SCIChartSurface,
-                      dates: [Date],
-                      bidPrices: [Float],
-                      askPrices: [Float]) -> SCIChartSurface {
+                      data: [OrderBook]) -> SCIChartSurface {
     
     let dataSeries_bids = SCIXyDataSeries(xType: .dateTime, yType: .float)
     let dataSeries_asks = SCIXyDataSeries(xType: .dateTime, yType: .float)
     
-    
-    for i in 0..<dates.count {
-        let date = dates[i]
-        let x: Date = date // todo
-        let bid: Float = bidPrices[i]
-        let ask: Float = askPrices[i]
-        dataSeries_bids.appendX(SCIGeneric(x), y: SCIGeneric(bid))
-        dataSeries_asks.appendX(SCIGeneric(x), y: SCIGeneric(ask))
+    for orderBook in data {
+        let x = SCIGeneric(orderBook.timestamp);
+        dataSeries_bids.appendX(x, y: SCIGeneric(orderBook.bids.first!.price))
+        dataSeries_asks.appendX(x, y: SCIGeneric(orderBook.asks.first!.price))
     }
     
     

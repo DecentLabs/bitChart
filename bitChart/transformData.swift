@@ -8,12 +8,18 @@
 
 import Foundation
 
-struct Result {
-    let dates: [Date]
-    let data: [[Float]]
+struct LimitOrder {
+    let price: Float
+    let quantity: Float
 }
 
-func getData() -> Result {
+struct OrderBook {
+    let timestamp: Date
+    let bids: [LimitOrder]
+    let asks: [LimitOrder]
+}
+
+func getData() -> [OrderBook] {
     
     // parse csv
     var data = readDataFromCSV(fileName: "orderbook", fileType: "csv")
@@ -28,34 +34,42 @@ func getData() -> Result {
             dataRows.append(column)
         }
     }
-    
-    let count = dataRows[0].count
-    let empty : [Float] = []
-    var dates: [Date] = []
-    var floats = Array(repeating: empty, count: count - 2)
-    
-    
-    // sort by columns
-    for r in dataRows {
-        for (i, c) in r.enumerated() {
-            // separate float data
-            if (i > 1) {
-                let data = (c as NSString).floatValue
-                floats[i-2].append(data)
-            }
-            // separate dates
-            if (i == 1) {
-                let d = stringToDate(string: c)
-                dates.append(d)
-            }
+
+    let columns = dataRows[0].count;
+    let depth = (columns - 2) / 4
+
+    var orderbooks: [OrderBook] = []
+    orderbooks.reserveCapacity(dataRows.count)
+
+    for row in dataRows {
+
+        if (row.count < columns) {
+            continue;
         }
+
+        let timestamp = stringToDate(string: row[1])
+
+        var asks: [LimitOrder] = []
+        asks.reserveCapacity(depth)
+
+        var bids: [LimitOrder] = []
+        bids.reserveCapacity(depth)
+
+        for i in 0...depth {
+            asks.append(parseLimitOrder(row: row, pos: i * 2 + 2))
+            bids.append(parseLimitOrder(row: row, pos: i * 2 + 4))
+        }
+
+        orderbooks.append(OrderBook(timestamp: timestamp, bids: bids, asks: asks))
     }
-    
-    
-    let result = Result(dates: dates, data: floats)
-    return result
+
+    return orderbooks
 }
 
+func parseLimitOrder(row: [String], pos: Int) -> LimitOrder {
+    return LimitOrder(price: (row[pos] as NSString).floatValue,
+                      quantity: (row[pos + 1] as NSString).floatValue)
+}
 
 func readDataFromCSV(fileName:String, fileType: String) -> String! {
     guard let filePath = Bundle.main.path(forResource: fileName, ofType: fileType)

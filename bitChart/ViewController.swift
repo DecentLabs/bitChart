@@ -10,10 +10,7 @@ import UIKit
 import SciChart
 import Foundation
 
-// get data from csv
-let csvData = getData()
-let dates = csvData.dates
-let data = csvData.data
+let data = getData()
 
 class ViewController: UIViewController {
     
@@ -33,26 +30,22 @@ class ViewController: UIViewController {
         // set chart
         sciChartSurface = setChart(
             sciChartSurface: sciChartSurface!,
-            dates: dates,
-            bidPrices: data[2],
-            askPrices: data[0]
-        )
-        
-        // add line charts
-//        sciChartSurface = createLinechart(
-//            sciChartSurface: sciChartSurface!,
-//            dates: dates,
-//            bidPrices: data[2],
-//            askPrices: data[0]
-//        )
-        
-        // heatmap test
-        sciChartSurface = createHeatmap(
-            sciChartSurface: sciChartSurface!,
-            dates: dates,
             data: data
         )
         
+        // add line charts
+        sciChartSurface = createLinechart(
+            sciChartSurface: sciChartSurface!,
+            data: data
+        )
+
+        // heatmap test
+//        sciChartSurface = createHeatmap(
+//            sciChartSurface: sciChartSurface!,
+//            dates: dates,
+//            data: data
+//        )
+
         // add chart modifiers (pan + zoom)
         sciChartSurface = addModifiers(sciChartSurface: sciChartSurface!)
     }
