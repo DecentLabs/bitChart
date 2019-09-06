@@ -50,9 +50,7 @@ class ViewController: UIViewController {
         sciChartSurface = createHeatmap(
             sciChartSurface: sciChartSurface!,
             dates: dates,
-            data: data,
-            bidPrices: data[2],
-            bidSizes: data[3]
+            data: data
         )
         
         // add chart modifiers (pan + zoom)

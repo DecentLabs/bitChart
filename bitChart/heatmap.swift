@@ -12,9 +12,7 @@ import SciChart
 // bids
 func createHeatmap ( sciChartSurface: SCIChartSurface,
                      dates: [Date],
-                     data: [[Float]],
-                     bidPrices: [Float],
-                     bidSizes: [Float] ) -> SCIChartSurface {
+                     data: [[Float]]) -> SCIChartSurface {
     
     let dataTypeNum = 4
     let bidSizeIndex = 3
