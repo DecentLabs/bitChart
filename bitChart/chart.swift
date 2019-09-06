@@ -21,14 +21,15 @@ func setChart (
 
     
     // default visible x range
-//    let minXRange = dates[dates.count / 3]
-//    let maxXRange = dates[(dates.count / 3) * 2]
-//    xAxis.visibleRange = SCIDateRange(dateMin: minXRange, max: maxXRange)
+    let minXRange = dates[0]
+    let maxXRange = dates[dates.count - 1]
+    xAxis.visibleRange = SCIDateRange(dateMin: minXRange, max: maxXRange)
     
     // default visible y range
-//    let minYRange = 6300
-//    let maxYRange = 10000
-//    yAxis.visibleRangeLimit = SCIDoubleRange(min: SCIGeneric(minYRange), max: SCIGeneric(maxYRange))
+    // TODO
+    let minYRange = 6300
+    let maxYRange = 10000
+    yAxis.visibleRangeLimit = SCIDoubleRange(min: SCIGeneric(minYRange), max: SCIGeneric(maxYRange))
     
 
     xAxis.textFormatting = "dd MMM yyyy, HH:mm:ss"

@@ -15,3 +15,7 @@ func stringToDate(string: String) -> Date {
     let date = dateFormatter.date(from: string)
     return (date ?? nil)!
 }
+
+func dateToTimestamp(date: Date) -> TimeInterval {
+    return date.timeIntervalSince1970
+}
