@@ -19,16 +19,12 @@ func setChart (
     let xAxis = SCIDateTimeAxis()
     let yAxis = SCINumericAxis()
 
-    
     // default visible x range
-    let minXRange = dates[0]
-    let maxXRange = dates[dates.count - 1]
-    xAxis.visibleRange = SCIDateRange(dateMin: minXRange, max: maxXRange)
+    xAxis.visibleRange = SCIDateRange(dateMin: dates.first, max: dates.last)
     
     // default visible y range
-    // TODO
-    let minYRange = 6300
-    let maxYRange = 10000
+    let minYRange = bidPrices.min()!
+    let maxYRange = bidPrices.max()!
     yAxis.visibleRangeLimit = SCIDoubleRange(min: SCIGeneric(minYRange), max: SCIGeneric(maxYRange))
     
 
