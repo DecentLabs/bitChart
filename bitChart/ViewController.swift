@@ -27,24 +27,23 @@ class ViewController: UIViewController {
         self.view.addSubview(sciChartSurface!)
         
         
-        // set chart
-        sciChartSurface = setChart(
-            sciChartSurface: sciChartSurface!,
-            data: data
-        )
-        
-        // add line charts
-        sciChartSurface = createLinechart(
-            sciChartSurface: sciChartSurface!,
-            data: data
-        )
-
-        // heatmap test
-//        sciChartSurface = createHeatmap(
+//        // set chart
+//        sciChartSurface = setChart(
 //            sciChartSurface: sciChartSurface!,
-//            dates: dates,
 //            data: data
 //        )
+//
+//        // add line charts
+//        sciChartSurface = createLinechart(
+//            sciChartSurface: sciChartSurface!,
+//            data: data
+//        )
+
+        // heatmap test
+        sciChartSurface = createHeatmap(
+            sciChartSurface: sciChartSurface!,
+            data: data
+        )
 
         // add chart modifiers (pan + zoom)
         sciChartSurface = addModifiers(sciChartSurface: sciChartSurface!)

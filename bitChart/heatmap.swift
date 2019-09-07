@@ -9,68 +9,77 @@
 import Foundation
 import SciChart
 
-// bids
-func createHeatmap ( sciChartSurface: SCIChartSurface,
-                     dates: [Date],
-                     data: [[Float]]) -> SCIChartSurface {
-    
-    let dataTypeNum = 4
-    let bidSizeIndex = 3
-    let bidPriceIndex = 2
-    let count = data.count
-    
-    
-    let WIDTH = Int32(500) // todo
-    
+func createHeatmap(sciChartSurface: SCIChartSurface,
+                   data: [OrderBook]) -> SCIChartSurface {
+
     // dates
-    let startDate = Int32(dateToTimestamp(date: dates[0]))
-    let endDate = Int32(dateToTimestamp(date: dates[dates.count - 1]))
+    let startDate = Int32(dateToTimestamp(date: data.first!.timestamp))
+    let endDate = Int32(dateToTimestamp(date: data.last!.timestamp))
     let duration = endDate - startDate
-    let stepX = duration / WIDTH
-    
+    let timeResolution = Int32(60 * 60) // hourly
+    let width = duration / timeResolution
+
     //prices
-    let maxPrice: Float = data[bidPriceIndex].max()!
-    let lastIndex: Int = (count - 1) - (dataTypeNum - (bidPriceIndex + 1)) // todo
-    let minPrice: Float = data[lastIndex].min()!
-    let range = Int32(maxPrice - minPrice)
-    
-    let HEIGHT = range // todo
-    
-    let heatmapDataSeries = SCIUniformHeatmapDataSeries(typeX: .dateTime,
+    let maxPrice = data.map({$0.asks.last!.price}).max()!
+    let minPrice = data.map({$0.bids.last!.price}).min()!
+    let priceRange = Int32(maxPrice - minPrice)
+
+    print("size", width, priceRange)
+
+    let heatmapDataSeries = SCIUniformHeatmapDataSeries(typeX: .int32,
                                                         y: .int32,
                                                         z: .double,
-                                                        sizeX: WIDTH,
-                                                        y: HEIGHT,
+                                                        sizeX: width,
+                                                        y: priceRange,
                                                         startX: SCIGeneric(startDate),
-                                                        stepX: SCIGeneric(stepX),
+                                                        stepX: SCIGeneric(1),
                                                         startY: SCIGeneric(minPrice),
-                                                        stepY: SCIGeneric(1.0))
+                                                        stepY: SCIGeneric(1))
 
-    
-    
-    // Access the 2D array of Z-values that the heatmap holds
-    let zValues = heatmapDataSeries.zValues()
-    // Populate the heatmap Z-values
-    
-    // bids - testing!!!
-    for _i in 0..<WIDTH {
-        let i = Int(_i)
-        let zVal = Double(data[bidSizeIndex][i])
-        let xVal = Int32(dateToTimestamp(date: dates[i]))
-        let yVal = Int32(data[bidPriceIndex][i])
-        zValues.setValue(SCIGeneric(zVal), atX: xVal, y: yVal)
+    let zValues = heatmapDataSeries.zValues();
+
+    var maxQuantity = 0.0
+    for orderBook in data {
+        let x = (Int32(dateToTimestamp(date: orderBook.timestamp)) - startDate) / timeResolution
+        func plot(_ o: LimitOrder) {
+            let y = Int32(o.price - minPrice)
+            let q = Double(o.quantity)
+            var currValue = zValues.valueAt(x: x, y: y).doubleData
+            currValue += q
+            maxQuantity = Double.maximum(maxQuantity, currValue)
+            zValues.setValue(SCIGeneric(currValue), atX: x, y: y)
+        }
+        for o in orderBook.asks {
+            plot(o)
+        }
+        for o in orderBook.bids {
+            plot(o)
+        }
     }
-    print(zValues)
-    // Declare a Heatmap Render Series
+
+    print("max", maxQuantity)
+
+    // Declare a Heatmap Render Series and set style
     let heatmapRenderableSeries = SCIFastUniformHeatmapRenderableSeries()
     heatmapRenderableSeries.minimum = 0
-    heatmapRenderableSeries.maximum = 100000
+    heatmapRenderableSeries.maximum = 100 // FIXME: derive from maxQuantity
     heatmapRenderableSeries.dataSeries = heatmapDataSeries
-    
 
-    // Add the Render Series to an existing SciChartSurface
+    let xAxis = SCINumericAxis()
+    xAxis.axisTitle = "Time"
+    sciChartSurface.xAxes.add(xAxis)
+
+    let yAxis = SCINumericAxis()
+    yAxis.axisTitle = "Price"
+    sciChartSurface.yAxes.add(yAxis)
+
+    let stops = [0.0, 0.1, 1.0].map({NSNumber.init(value: $0)})
+    let colors:[UIColor] = [.fromABGRColorCode(0x00000000), .blue, .white]
+
+    heatmapRenderableSeries.colorMap = SCIColorMap.init(colors: colors, andStops: stops)
+
     sciChartSurface.renderableSeries.add(heatmapRenderableSeries)
-    
+
     return sciChartSurface
     
 }
