@@ -10,7 +10,14 @@ import UIKit
 import SciChart
 import Foundation
 
-let data = getData()
+//let data = getData()
+let data = getMultiStockData(stockNames: [
+    "bitfinex",
+    "kraken",
+    "coinbasepro",
+    "bitstamp",
+    "bitmex"
+])
 
 class ViewController: UIViewController {
     
@@ -42,7 +49,7 @@ class ViewController: UIViewController {
         // heatmap test
         sciChartSurface = createHeatmap(
             sciChartSurface: sciChartSurface!,
-            data: data
+            data: data[0].orderBooks // todo
         )
 
         // add chart modifiers (pan + zoom)

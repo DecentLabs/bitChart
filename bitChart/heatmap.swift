@@ -77,7 +77,7 @@ func createHeatmap(sciChartSurface: SCIChartSurface,
     // Declare a Heatmap Render Series and set style
     let heatmapRenderableSeries = SCIFastUniformHeatmapRenderableSeries()
     heatmapRenderableSeries.minimum = 0
-    heatmapRenderableSeries.maximum = 4 // FIXME: derive from max quantity
+    heatmapRenderableSeries.maximum = 6 // FIXME: derive from max quantity
     heatmapRenderableSeries.dataSeries = heatmapDataSeries
 
     let xAxis = SCINumericAxis()
