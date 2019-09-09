@@ -21,7 +21,7 @@ struct OrderBook {
 
 func getExchangeData() -> [String : [OrderBook]] {
     
-    let dataRows = parseCSV(fileName: "orderbook2")
+    let dataRows = parseCSV(fileName: "orderbook2", cutFirst: false)
     
     var exchangeData = [String: [OrderBook]]()
     
@@ -58,7 +58,7 @@ func getExchangeData() -> [String : [OrderBook]] {
 
 func getData() -> [OrderBook] {
 
-    var dataRows = parseCSV(fileName: "orderbook")
+    var dataRows = parseCSV(fileName: "orderbook", cutFirst: true)
 
     let columns = dataRows[0].count;
     let depth = (columns - 2) / 4
@@ -98,7 +98,7 @@ func parseLimitOrder(row: [String], pos: Int) -> LimitOrder {
 }
 
 
-func parseCSV(fileName: String) -> [[String]] {
+func parseCSV(fileName: String, cutFirst: Bool) -> [[String]] {
     var data = readDataFromCSV(fileName: fileName, fileType: "csv")
     data = cleanRows(file: data!)
     let stringRows = data!.components(separatedBy: "\n")
@@ -107,8 +107,8 @@ func parseCSV(fileName: String) -> [[String]] {
     
     for (i, row) in stringRows.enumerated() {
         let column = row.components(separatedBy: ",")
-        if (i != 0) {
-            dataRows.append(column)
+        if ((cutFirst == false) || (cutFirst == true && i != 0)) {
+           dataRows.append(column)
         }
     }
     

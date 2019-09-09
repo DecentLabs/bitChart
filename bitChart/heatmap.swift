@@ -10,7 +10,8 @@ import Foundation
 import SciChart
 
 func createHeatmap(sciChartSurface: SCIChartSurface,
-                   data: [OrderBook]) -> SCIChartSurface {
+                   data: [OrderBook],
+                   colors: [UIColor]) -> SCIChartSurface {
 
     // dates
     let startDate = Int32(dateToTimestamp(date: data.first!.timestamp))
@@ -18,13 +19,13 @@ func createHeatmap(sciChartSurface: SCIChartSurface,
     let duration = endDate - startDate
     let timeResolution = Int32(60 * 60) // hourly
     let width = duration / timeResolution
+    
+    print(duration)
 
     //prices
     let maxPrice = data.map({$0.asks.last!.price}).max()!
     let minPrice = data.map({$0.bids.last!.price}).min()!
     let height = Int32(maxPrice - minPrice)
-
-    print("size", width, height)
 
     let heatmapDataSeries = SCIUniformHeatmapDataSeries(typeX: .int32,
                                                         y: .int32,
@@ -32,7 +33,7 @@ func createHeatmap(sciChartSurface: SCIChartSurface,
                                                         sizeX: width,
                                                         y: height,
                                                         startX: SCIGeneric(startDate),
-                                                        stepX: SCIGeneric(1),
+                                                        stepX: SCIGeneric(timeResolution),
                                                         startY: SCIGeneric(minPrice),
                                                         stepY: SCIGeneric(1))
 
@@ -77,19 +78,10 @@ func createHeatmap(sciChartSurface: SCIChartSurface,
     // Declare a Heatmap Render Series and set style
     let heatmapRenderableSeries = SCIFastUniformHeatmapRenderableSeries()
     heatmapRenderableSeries.minimum = 0
-    heatmapRenderableSeries.maximum = 6 // FIXME: derive from max quantity
+    heatmapRenderableSeries.maximum = 4 // FIXME: derive from max quantity
     heatmapRenderableSeries.dataSeries = heatmapDataSeries
 
-    let xAxis = SCINumericAxis()
-    xAxis.axisTitle = "Time"
-    sciChartSurface.xAxes.add(xAxis)
-
-    let yAxis = SCINumericAxis()
-    yAxis.axisTitle = "Price"
-    sciChartSurface.yAxes.add(yAxis)
-
-    let stops = [0.0, 0.5, 1.0].map({NSNumber.init(value: $0)})
-    let colors:[UIColor] = [.fromABGRColorCode(0x00000000), .blue, .white]
+    let stops = [0.0, 1.0].map({NSNumber.init(value: $0)})
 
     heatmapRenderableSeries.colorMap = SCIColorMap.init(colors: colors, andStops: stops)
 
