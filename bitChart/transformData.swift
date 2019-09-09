@@ -19,32 +19,17 @@ struct OrderBook {
     let asks: [LimitOrder]
 }
 
-class ExchangeData {
-    let name: String
-    var orderBooks: [OrderBook] = []
-    
-    init(name: String) {
-        self.name = name
-    }
-}
-
-func getMultiStockData(stockNames: [String]) -> [ExchangeData] {
+func getExchangeData() -> [String : [OrderBook]] {
     
     let dataRows = parseCSV(fileName: "orderbook2")
     
-    var stocks: [ExchangeData] = []
-    
-    for stock in stockNames {
-        stocks.append(ExchangeData(name: stock))
-    }
-    
+    var exchangeData = [String: [OrderBook]]()
     
     let dataLength = 200
     let depth = dataLength / 2 - 1
     
     for row in dataRows {
         let name = row[0]
-        let selectedStock = stocks.first(where: {$0.name == name})
         
         let timestamp = Double(row[1])
         let date = Date(timeIntervalSince1970: timestamp!)
@@ -64,10 +49,10 @@ func getMultiStockData(stockNames: [String]) -> [ExchangeData] {
             bids.append(parseLimitOrder(row: bidsData, pos: i * 2))
         }
         
-        selectedStock!.orderBooks.append(OrderBook(timestamp: date, bids: bids, asks: asks))
+        exchangeData[name, default: []].append(OrderBook(timestamp: date, bids: bids, asks: asks))
     }
     
-    return stocks
+    return exchangeData
 }
 
 
