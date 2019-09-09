@@ -22,15 +22,15 @@ func createHeatmap(sciChartSurface: SCIChartSurface,
     //prices
     let maxPrice = data.map({$0.asks.last!.price}).max()!
     let minPrice = data.map({$0.bids.last!.price}).min()!
-    let priceRange = Int32(maxPrice - minPrice)
+    let height = Int32(maxPrice - minPrice)
 
-    print("size", width, priceRange)
+    print("size", width, height)
 
     let heatmapDataSeries = SCIUniformHeatmapDataSeries(typeX: .int32,
                                                         y: .int32,
                                                         z: .double,
                                                         sizeX: width,
-                                                        y: priceRange,
+                                                        y: height,
                                                         startX: SCIGeneric(startDate),
                                                         stepX: SCIGeneric(1),
                                                         startY: SCIGeneric(minPrice),
@@ -38,7 +38,15 @@ func createHeatmap(sciChartSurface: SCIChartSurface,
 
     let zValues = heatmapDataSeries.zValues();
 
-    var maxQuantity = 0.0
+    // clear
+    let zero = SCIGeneric(0.0)
+    for x in 0..<width {
+        for y in 0..<height {
+            zValues.setValue(zero, atX: x, y: y)
+        }
+    }
+
+    // accumulate
     for orderBook in data {
         let x = (Int32(dateToTimestamp(date: orderBook.timestamp)) - startDate) / timeResolution
         func plot(_ o: LimitOrder) {
@@ -46,7 +54,6 @@ func createHeatmap(sciChartSurface: SCIChartSurface,
             let q = Double(o.quantity)
             var currValue = zValues.valueAt(x: x, y: y).doubleData
             currValue += q
-            maxQuantity = Double.maximum(maxQuantity, currValue)
             zValues.setValue(SCIGeneric(currValue), atX: x, y: y)
         }
         for o in orderBook.asks {
@@ -57,12 +64,20 @@ func createHeatmap(sciChartSurface: SCIChartSurface,
         }
     }
 
-    print("max", maxQuantity)
+    // normalize with logarithm
+    for x in 0..<width {
+        for y in 0..<height {
+            let currValue = zValues.valueAt(x: x, y: y).doubleData
+            if (currValue > 0) {
+                zValues.setValue(SCIGeneric(log(currValue + 1)), atX: x, y: y)
+            }
+        }
+    }
 
     // Declare a Heatmap Render Series and set style
     let heatmapRenderableSeries = SCIFastUniformHeatmapRenderableSeries()
     heatmapRenderableSeries.minimum = 0
-    heatmapRenderableSeries.maximum = 100 // FIXME: derive from maxQuantity
+    heatmapRenderableSeries.maximum = 4 // FIXME: derive from max quantity
     heatmapRenderableSeries.dataSeries = heatmapDataSeries
 
     let xAxis = SCINumericAxis()
@@ -73,7 +88,7 @@ func createHeatmap(sciChartSurface: SCIChartSurface,
     yAxis.axisTitle = "Price"
     sciChartSurface.yAxes.add(yAxis)
 
-    let stops = [0.0, 0.1, 1.0].map({NSNumber.init(value: $0)})
+    let stops = [0.0, 0.5, 1.0].map({NSNumber.init(value: $0)})
     let colors:[UIColor] = [.fromABGRColorCode(0x00000000), .blue, .white]
 
     heatmapRenderableSeries.colorMap = SCIColorMap.init(colors: colors, andStops: stops)
