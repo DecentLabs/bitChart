@@ -12,20 +12,23 @@ import SciChart
 func createHeatmap(sciChartSurface: SCIChartSurface,
                    data: [OrderBook],
                    colors: [UIColor]) -> SCIChartSurface {
-
+    
+    
     // dates
-    let startDate = Int32(dateToTimestamp(date: data.first!.timestamp))
-    let endDate = Int32(dateToTimestamp(date: data.last!.timestamp))
+    let startDate = Int32(dateToTimestamp(date: (data.first!.timestamp)))
+    let endDate = Int32(dateToTimestamp(date: (data.last!.timestamp)))
     let duration = endDate - startDate
     let timeResolution = Int32(60 * 60) // hourly
     let width = duration / timeResolution
-    
-    print(duration)
 
-    //prices
+
+        //prices
     let maxPrice = data.map({$0.asks.last!.price}).max()!
     let minPrice = data.map({$0.bids.last!.price}).min()!
     let height = Int32(maxPrice - minPrice)
+    
+    print(width, height)
+    print(minPrice, maxPrice)
 
     let heatmapDataSeries = SCIUniformHeatmapDataSeries(typeX: .int32,
                                                         y: .int32,
@@ -53,9 +56,11 @@ func createHeatmap(sciChartSurface: SCIChartSurface,
         func plot(_ o: LimitOrder) {
             let y = Int32(o.price - minPrice)
             let q = Double(o.quantity)
-            var currValue = zValues.valueAt(x: x, y: y).doubleData
-            currValue += q
-            zValues.setValue(SCIGeneric(currValue), atX: x, y: y)
+            if (y > 0 || q > 0) {
+                var currValue = zValues.valueAt(x: x, y: y).doubleData
+                currValue += q
+                zValues.setValue(SCIGeneric(currValue), atX: x, y: y)
+            }
         }
         for o in orderBook.asks {
             plot(o)
@@ -78,14 +83,15 @@ func createHeatmap(sciChartSurface: SCIChartSurface,
     // Declare a Heatmap Render Series and set style
     let heatmapRenderableSeries = SCIFastUniformHeatmapRenderableSeries()
     heatmapRenderableSeries.minimum = 0
-    heatmapRenderableSeries.maximum = 4 // FIXME: derive from max quantity
+    heatmapRenderableSeries.maximum = 10 // FIXME: derive from max quantity
     heatmapRenderableSeries.dataSeries = heatmapDataSeries
 
-    let stops = [0.0, 1.0].map({NSNumber.init(value: $0)})
+    let stops = [0.0, 0.5, 1.0].map({NSNumber.init(value: $0)})
 
     heatmapRenderableSeries.colorMap = SCIColorMap.init(colors: colors, andStops: stops)
 
     sciChartSurface.renderableSeries.add(heatmapRenderableSeries)
+
 
     return sciChartSurface
     

@@ -30,6 +30,7 @@ func getExchangeData() -> [String : [OrderBook]] {
     
     for row in dataRows {
         let name = row[0]
+        let usd = (name == "bitmex")
         
         let timestamp = Double(row[1])
         let date = Date(timeIntervalSince1970: timestamp!)
@@ -44,14 +45,28 @@ func getExchangeData() -> [String : [OrderBook]] {
         var bids: [LimitOrder] = []
         bids.reserveCapacity(dataLength / 2)
         
+        var asksAll: [LimitOrder] = []
+        var bidsAll: [LimitOrder] = []
+        
+        
         for i in 0...(depth) {
-            asks.append(parseLimitOrder(row: asksData, pos: i * 2))
-            bids.append(parseLimitOrder(row: bidsData, pos: i * 2))
+            let pos = i * 2
+            let a = parseLimitOrder(row: asksData, pos: pos, usd: usd)
+            let b = parseLimitOrder(row: bidsData, pos: pos, usd: usd)
+            
+            if (a.price > 0) {
+                asks.append(a)
+                asksAll.append(a)
+            }
+            if (b.price > 0) {
+                bids.append(b)
+                bidsAll.append(b)
+            }
         }
         
         exchangeData[name, default: []].append(OrderBook(timestamp: date, bids: bids, asks: asks))
+        exchangeData["all", default: []].append(OrderBook(timestamp: date, bids: bidsAll, asks: asksAll))
     }
-    
     return exchangeData
 }
 
@@ -81,20 +96,23 @@ func getData() -> [OrderBook] {
         bids.reserveCapacity(depth)
 
         for i in 0...depth {
-            asks.append(parseLimitOrder(row: row, pos: i * 2 + 2))
-            bids.append(parseLimitOrder(row: row, pos: i * 2 + 4))
+            asks.append(parseLimitOrder(row: row, pos: i * 2 + 2, usd: false))
+            bids.append(parseLimitOrder(row: row, pos: i * 2 + 4, usd: false))
         }
 
         orderbooks.append(OrderBook(timestamp: timestamp, bids: bids, asks: asks))
     }
 
+    
     return orderbooks
 }
 
 
-func parseLimitOrder(row: [String], pos: Int) -> LimitOrder {
-    return LimitOrder(price: (row[pos] as NSString).floatValue,
-                      quantity: (row[pos + 1] as NSString).floatValue)
+func parseLimitOrder(row: [String], pos: Int, usd: Bool) -> LimitOrder {
+    let p = (row[pos] as NSString).floatValue
+    let q = (row[pos + 1] as NSString).floatValue
+    let _q = usd ? (q / p) : q
+    return LimitOrder(price: p, quantity: _q)
 }
 
 

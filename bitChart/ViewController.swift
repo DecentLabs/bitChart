@@ -38,29 +38,29 @@ class ViewController: UIViewController {
         
         // heatmaps
         // bitfinex, bitstamp, kraken, bitmex, coinbasepro
+        
+//        sciChartSurface = createHeatmap(
+//            sciChartSurface: sciChartSurface!,
+//            data: data["bitstamp"]!,
+//            colors: [.fromABGRColorCode(0x00000000), .fromABGRColorCode(0x6600ff00), .white]
+//        )
+//        sciChartSurface = createHeatmap(
+//            sciChartSurface: sciChartSurface!,
+//            data: data["kraken"]!,
+//            colors: [.fromABGRColorCode(0x00000000), .fromABGRColorCode(0x66ff0000), .white]
+//        )
+//        sciChartSurface = createHeatmap(
+//            sciChartSurface: sciChartSurface!,
+//            data: data["bitfinex"]!,
+//            colors: [.fromABGRColorCode(0x00000000), .fromABGRColorCode(0x660000ff), .white]
+//        )
+        
         sciChartSurface = createHeatmap(
             sciChartSurface: sciChartSurface!,
-            data: data["bitstamp"]!,
-            colors: [.fromABGRColorCode(0x00000000), .fromABGRColorCode(0x6600ff00)]
-        )
-        sciChartSurface = createHeatmap(
-            sciChartSurface: sciChartSurface!,
-            data: data["kraken"]!,
-            colors: [.fromABGRColorCode(0x00000000), .fromABGRColorCode(0x66ff0000)]
-        )
-        sciChartSurface = createHeatmap(
-            sciChartSurface: sciChartSurface!,
-            data: data["bitfinex"]!,
-            colors: [.fromABGRColorCode(0x00000000), .fromABGRColorCode(0x660000ff)]
+            data: data["all"]!,
+            colors: [.fromABGRColorCode(0xff000000), .fromABGRColorCode(0xffff0000), .white]
         )
         
-        
-        
-        // add line charts
-        //        sciChartSurface = createLinechart(
-        //            sciChartSurface: sciChartSurface!,
-        //            data: data
-        //        )
 
         // add chart modifiers (pan + zoom)
         sciChartSurface = addModifiers(sciChartSurface: sciChartSurface!)
