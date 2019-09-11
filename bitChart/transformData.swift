@@ -45,10 +45,6 @@ func getExchangeData() -> [String : [OrderBook]] {
         var bids: [LimitOrder] = []
         bids.reserveCapacity(dataLength / 2)
         
-        var asksAll: [LimitOrder] = []
-        var bidsAll: [LimitOrder] = []
-        
-        
         for i in 0...(depth) {
             let pos = i * 2
             let a = parseLimitOrder(row: asksData, pos: pos, usd: usd)
@@ -56,55 +52,16 @@ func getExchangeData() -> [String : [OrderBook]] {
             
             if (a.price > 0) {
                 asks.append(a)
-                asksAll.append(a)
             }
             if (b.price > 0) {
                 bids.append(b)
-                bidsAll.append(b)
             }
         }
         
         exchangeData[name, default: []].append(OrderBook(timestamp: date, bids: bids, asks: asks))
-        exchangeData["all", default: []].append(OrderBook(timestamp: date, bids: bidsAll, asks: asksAll))
     }
-    return exchangeData
-}
-
-
-func getData() -> [OrderBook] {
-
-    var dataRows = parseCSV(fileName: "orderbook", cutFirst: true)
-
-    let columns = dataRows[0].count;
-    let depth = (columns - 2) / 4
-
-    var orderbooks: [OrderBook] = []
-    orderbooks.reserveCapacity(dataRows.count)
-
-    for row in dataRows {
-
-        if (row.count < columns) {
-            continue;
-        }
-
-        let timestamp = stringToDate(string: row[1])
-
-        var asks: [LimitOrder] = []
-        asks.reserveCapacity(depth)
-
-        var bids: [LimitOrder] = []
-        bids.reserveCapacity(depth)
-
-        for i in 0...depth {
-            asks.append(parseLimitOrder(row: row, pos: i * 2 + 2, usd: false))
-            bids.append(parseLimitOrder(row: row, pos: i * 2 + 4, usd: false))
-        }
-
-        orderbooks.append(OrderBook(timestamp: timestamp, bids: bids, asks: asks))
-    }
-
     
-    return orderbooks
+    return exchangeData
 }
 
 
@@ -154,4 +111,41 @@ func cleanRows(file:String) -> String {
     cleanFile = cleanFile.replacingOccurrences(of: "\r", with: "\n")
     cleanFile = cleanFile.replacingOccurrences(of: "\n\n", with: "\n")
     return cleanFile
+}
+
+// for older orderbook
+func getData() -> [OrderBook] {
+    
+    var dataRows = parseCSV(fileName: "orderbook", cutFirst: true)
+    
+    let columns = dataRows[0].count;
+    let depth = (columns - 2) / 4
+    
+    var orderbooks: [OrderBook] = []
+    orderbooks.reserveCapacity(dataRows.count)
+    
+    for row in dataRows {
+        
+        if (row.count < columns) {
+            continue;
+        }
+        
+        let timestamp = stringToDate(string: row[1])
+        
+        var asks: [LimitOrder] = []
+        asks.reserveCapacity(depth)
+        
+        var bids: [LimitOrder] = []
+        bids.reserveCapacity(depth)
+        
+        for i in 0...depth {
+            asks.append(parseLimitOrder(row: row, pos: i * 2 + 2, usd: false))
+            bids.append(parseLimitOrder(row: row, pos: i * 2 + 4, usd: false))
+        }
+        
+        orderbooks.append(OrderBook(timestamp: timestamp, bids: bids, asks: asks))
+    }
+    
+    
+    return orderbooks
 }

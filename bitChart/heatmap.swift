@@ -9,25 +9,62 @@
 import Foundation
 import SciChart
 
-func createHeatmap(sciChartSurface: SCIChartSurface,
-                   data: [OrderBook]) -> SCIChartSurface {
+func getMinMaxDates(orderbook: [OrderBook]) -> [String: Int32] {
+    let startDate = Int32(dateToTimestamp(date: orderbook.first!.timestamp))
+    let endDate = Int32(dateToTimestamp(date: orderbook.last!.timestamp))
     
+    return ["startDate": startDate, "endDate": endDate]
+}
+
+func getMinMaxPrice(orderbook: [OrderBook]) -> [String: Float] {
+    let maxPrice = orderbook.map({$0.asks.last!.price}).max()!
+    let minPrice = orderbook.map({$0.bids.last!.price}).min()!
     
-    // dates
-    let startDate = Int32(dateToTimestamp(date: (data.first!.timestamp)))
-    let endDate = Int32(dateToTimestamp(date: (data.last!.timestamp)))
+    return ["minPrice": minPrice, "maxPrice": maxPrice]
+}
+
+func getChartProps (data: [String : [OrderBook]], timeResolution: Int32) -> [String: Any] {
+    var startDate: Int32 = 0
+    var endDate: Int32 = 0
+    var minPrice: Float = 0.0
+    var maxPrice: Float = 0.0
+    
+    for (key, _) in data {
+        let dates = getMinMaxDates(orderbook: data[key]!)
+        let prices = getMinMaxPrice(orderbook: data[key]!)
+        
+        startDate = dates["startDate"]! > startDate ? dates["startDate"]! : startDate
+        endDate = dates["endDate"]! > endDate ? dates["endDate"]! : endDate
+        minPrice = prices["minPrice"]! > minPrice ? prices["minPrice"]! : minPrice
+        maxPrice = prices["maxPrice"]! > maxPrice ? prices["maxPrice"]! : maxPrice
+    }
+    
     let duration = endDate - startDate
-    let timeResolution = Int32(60 * 60) // hourly
+    
     let width = duration / timeResolution
-
-
-        //prices
-    let maxPrice = data.map({$0.asks.last!.price}).max()!
-    let minPrice = data.map({$0.bids.last!.price}).min()!
     let height = Int32(maxPrice - minPrice)
     
-    print(width, height)
-    print(minPrice, maxPrice)
+    
+    return [
+        "width": width,
+        "height": height,
+        "minPrice": minPrice,
+        "startDate": startDate
+    ]
+}
+
+
+func createHeatmap(sciChartSurface: SCIChartSurface,
+                   data: [String : [OrderBook]]) -> SCIChartSurface {
+    
+    let timeResolution = Int32(60 * 60) // hourly
+    
+    let chartProps = getChartProps(data: data, timeResolution: timeResolution)
+    let width = chartProps["width"]! as! Int32
+    let height = chartProps["height"]! as! Int32
+    let startDate = chartProps["startDate"]! as! Int32
+    let minPrice = chartProps["minPrice"]! as! Float
+    
 
     let heatmapDataSeries = SCIUniformHeatmapDataSeries(typeX: .int32,
                                                         y: .int32,
@@ -37,12 +74,11 @@ func createHeatmap(sciChartSurface: SCIChartSurface,
                                                         startX: SCIGeneric(startDate),
                                                         stepX: SCIGeneric(timeResolution),
                                                         startY: SCIGeneric(minPrice),
-                                                        stepY: SCIGeneric(1))
+                                                        stepY: SCIGeneric(20))
 
     let zValues = heatmapDataSeries.zValues();
-
-    // clear
     let zero = SCIGeneric(0.0)
+    // clear
     for x in 0..<width {
         for y in 0..<height {
             zValues.setValue(zero, atX: x, y: y)
@@ -50,28 +86,33 @@ func createHeatmap(sciChartSurface: SCIChartSurface,
     }
 
     // accumulate
-    
-    for orderBook in data {
-        let x = (Int32(dateToTimestamp(date: orderBook.timestamp)) - startDate) / timeResolution
-        func plot(_ o: LimitOrder) {
-            let y = Int32(o.price - minPrice)
-            let q = Double(o.quantity)
-            if (y > 0 || q > 0) {
-                var currValue = zValues.valueAt(x: x, y: y).doubleData
-                currValue += q
-                zValues.setValue(SCIGeneric(currValue), atX: x, y: y)
+    for (name, exchange) in data {
+        
+        // loop in orderbook
+        for orderBook in exchange {
+            let x = (Int32(dateToTimestamp(date: orderBook.timestamp)) - startDate) / timeResolution
+            
+            func plot(_ o: LimitOrder) {
+                let y = Int32(o.price - minPrice)
+                let q = Double(o.quantity)
+                if (y > 0 || q > 0) {
+                    var currValue = zValues.valueAt(x: x, y: y).doubleData
+                    currValue += q
+                    zValues.setValue(SCIGeneric(currValue), atX: x, y: y)
+                }
+            }
+            for o in orderBook.asks {
+                plot(o)
+            }
+            for o in orderBook.bids {
+                plot(o)
             }
         }
-        for o in orderBook.asks {
-            plot(o)
-        }
-        for o in orderBook.bids {
-            plot(o)
-        }
+        
     }
 
-    var maxZ = log(1.0)
     // normalize with logarithm
+    var maxZ = log(1.0)
     for x in 0..<width {
         for y in 0..<height {
             let currValue = zValues.valueAt(x: x, y: y).doubleData
@@ -90,10 +131,10 @@ func createHeatmap(sciChartSurface: SCIChartSurface,
     heatmapRenderableSeries.dataSeries = heatmapDataSeries
 
     // add colors
-    let stops = [NSNumber(value: 0.0), NSNumber(value: 0.2), NSNumber(value: 0.4), NSNumber(value: 0.6), NSNumber(value: 0.8), NSNumber(value: 1.0)]
-    let colors = [UIColor.fromARGBColorCode(0xFF00008B)!, UIColor.fromARGBColorCode(0xFF6495ED)!, UIColor.fromARGBColorCode(0xFF006400)!, UIColor.fromARGBColorCode(0xFF7FFF00)!, UIColor.fromARGBColorCode(0xFFFFFF00)!, UIColor.fromARGBColorCode(0xFFFF0000)!]
-
-    heatmapRenderableSeries.colorMap = SCIColorMap.init(colors: colors, andStops: stops)
+//    let stops = [NSNumber(value: 0.0), NSNumber(value: 1)]
+//    let colors = [UIColor.fromARGBColorCode(0xFF000000)!,UIColor.fromARGBColorCode(0xFFc5c5c5)!]
+//
+//    heatmapRenderableSeries.colorMap = SCIColorMap.init(colors: colors, andStops: stops)
     
     
     // create xy axis
@@ -110,7 +151,6 @@ func createHeatmap(sciChartSurface: SCIChartSurface,
     xAxis.registerVisibleRangeChangedCallback { (newRange, oldRange, isAnimated, sender) in
         let min = newRange!.min.doubleData
         let max = newRange!.max.doubleData
-        print(min, max)
     }
 
     

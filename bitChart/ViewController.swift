@@ -30,22 +30,10 @@ class ViewController: UIViewController {
         
         // heatmaps
         // bitfinex, bitstamp, kraken, bitmex, coinbasepro
-//        sciChartSurface = createHeatmap(
-//            sciChartSurface: sciChartSurface!,
-//            data: data["bitstamp"]!
-//        )
-//        sciChartSurface = createHeatmap(
-//            sciChartSurface: sciChartSurface!,
-//            data: data["kraken"]!
-//        )
-//        sciChartSurface = createHeatmap(
-//            sciChartSurface: sciChartSurface!,
-//            data: data["bitfinex"]!
-//        )
         
         sciChartSurface = createHeatmap(
             sciChartSurface: sciChartSurface!,
-            data: data["all"]!
+            data: data
         )
         
 
