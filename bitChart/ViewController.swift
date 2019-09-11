@@ -26,39 +26,26 @@ class ViewController: UIViewController {
         
         // Add the SCIChartSurface as a subview
         self.view.addSubview(sciChartSurface!)
-        
-        
-        // set chart
-        sciChartSurface = setChart( sciChartSurface: sciChartSurface! )
-        
-        print(data["bitstamp"]!.count, "bitstamp")
-        print(data["kraken"]!.count, "kraken")
-        print(data["bitfinex"]!.count, "bitfinex")
 
         
         // heatmaps
         // bitfinex, bitstamp, kraken, bitmex, coinbasepro
-        
 //        sciChartSurface = createHeatmap(
 //            sciChartSurface: sciChartSurface!,
-//            data: data["bitstamp"]!,
-//            colors: [.fromABGRColorCode(0x00000000), .fromABGRColorCode(0x6600ff00), .white]
+//            data: data["bitstamp"]!
 //        )
 //        sciChartSurface = createHeatmap(
 //            sciChartSurface: sciChartSurface!,
-//            data: data["kraken"]!,
-//            colors: [.fromABGRColorCode(0x00000000), .fromABGRColorCode(0x66ff0000), .white]
+//            data: data["kraken"]!
 //        )
 //        sciChartSurface = createHeatmap(
 //            sciChartSurface: sciChartSurface!,
-//            data: data["bitfinex"]!,
-//            colors: [.fromABGRColorCode(0x00000000), .fromABGRColorCode(0x660000ff), .white]
+//            data: data["bitfinex"]!
 //        )
         
         sciChartSurface = createHeatmap(
             sciChartSurface: sciChartSurface!,
-            data: data["all"]!,
-            colors: [.fromABGRColorCode(0xff000000), .fromABGRColorCode(0xffff0000), .white]
+            data: data["all"]!
         )
         
 
