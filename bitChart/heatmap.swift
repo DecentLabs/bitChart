@@ -53,10 +53,17 @@ func getChartProps (data: [String : [OrderBook]], timeResolution: Int32) -> [Str
     ]
 }
 
+func filterData (data: [String : [OrderBook]], list: [String]) -> [String : [OrderBook]] {
+    let result = data.filter({list.contains($0.key)})
+    return result
+}
+
 
 func createHeatmap(sciChartSurface: SCIChartSurface,
-                   data: [String : [OrderBook]]) -> SCIChartSurface {
+                   _data: [String : [OrderBook]],
+                   exchangeList: [String]) -> SCIChartSurface {
     
+    let data = filterData(data: _data, list: exchangeList)
     let timeResolution = Int32(60 * 60) // hourly
     
     let chartProps = getChartProps(data: data, timeResolution: timeResolution)

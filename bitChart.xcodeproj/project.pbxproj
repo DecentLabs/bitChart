@@ -23,6 +23,7 @@
 		7AB1D5C5231D5D2500A430C2 /* SciChart.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7AB1D5C3231D5D2500A430C2 /* SciChart.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7AB1D5C8231D5E2C00A430C2 /* SCIGenericWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB1D5C7231D5E2C00A430C2 /* SCIGenericWrapper.swift */; };
 		7AB1D5CA231E78B700A430C2 /* orderbook.csv in Resources */ = {isa = PBXBuildFile; fileRef = 7AB1D5C9231E78B700A430C2 /* orderbook.csv */; };
+		7AEEA390232A908C004952EC /* heatmaprefact.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AEEA38F232A908C004952EC /* heatmaprefact.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -80,6 +81,7 @@
 		7AB1D5C3231D5D2500A430C2 /* SciChart.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SciChart.framework; sourceTree = "<group>"; };
 		7AB1D5C7231D5E2C00A430C2 /* SCIGenericWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SCIGenericWrapper.swift; path = SciChart.framework/SwiftUtil/SCIGenericWrapper.swift; sourceTree = "<group>"; };
 		7AB1D5C9231E78B700A430C2 /* orderbook.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = orderbook.csv; sourceTree = "<group>"; };
+		7AEEA38F232A908C004952EC /* heatmaprefact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = heatmaprefact.swift; sourceTree = "<group>"; };
 		9A4E2FA6E476B127D6D98AEC /* Pods-bitChart.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bitChart.release.xcconfig"; path = "Target Support Files/Pods-bitChart/Pods-bitChart.release.xcconfig"; sourceTree = "<group>"; };
 		9F1AC4CB03EA424917377C13 /* Pods-bitChart.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bitChart.debug.xcconfig"; path = "Target Support Files/Pods-bitChart/Pods-bitChart.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -158,6 +160,7 @@
 				7A20E36A231FF71E00716936 /* heatmap.swift */,
 				7A20E36C2320075800716936 /* linechart.swift */,
 				7A20E36E2320081700716936 /* dateFormatter.swift */,
+				7AEEA38F232A908C004952EC /* heatmaprefact.swift */,
 			);
 			path = bitChart;
 			sourceTree = "<group>";
@@ -370,6 +373,7 @@
 				7A20E36F2320081700716936 /* dateFormatter.swift in Sources */,
 				7A20E36D2320075800716936 /* linechart.swift in Sources */,
 				7A20E36B231FF71E00716936 /* heatmap.swift in Sources */,
+				7AEEA390232A908C004952EC /* heatmaprefact.swift in Sources */,
 				7AB1D5C8231D5E2C00A430C2 /* SCIGenericWrapper.swift in Sources */,
 				7A84A8B5231D4FF900502BA1 /* ViewController.swift in Sources */,
 				7A84A8B3231D4FF900502BA1 /* AppDelegate.swift in Sources */,

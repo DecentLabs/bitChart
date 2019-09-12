@@ -11,11 +11,12 @@ import SciChart
 import Foundation
 
 let data = getExchangeData()
+var exchangeList: [[String: Any]] = []
 
 class ViewController: UIViewController {
     
     var sciChartSurface: SCIChartSurface?
-    @IBOutlet weak var btnCheckBox:UIButton!
+    var checked: [String] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,23 +34,30 @@ class ViewController: UIViewController {
         self.view.addSubview(sciChartSurface!)
         
         
-        // heatmaps: bitfinex, bitstamp, kraken, bitmex, coinbasepro
-        sciChartSurface = createHeatmap(
-            sciChartSurface: sciChartSurface!,
-            data: data
-        )
+        // get exchange names
+        var i = 0
+        for (name, _) in data {
+            exchangeList.append(["tag": i, "name": name])
+            i += 1
+        }
         
         // create checkboxes
         let btnSize = 60
-        for b in 0..<5 {
+        for (b, _) in exchangeList.enumerated() {
             let checkmark = UIButton(type: UIButton.ButtonType.custom) as UIButton
             checkmark.frame = CGRect(x: Int(20 + chartWidth), y: b * btnSize + 40, width: btnSize, height: btnSize)
             checkmark.setImage(UIImage(named:"Checkmarkempty"), for: .normal)
             checkmark.setImage(UIImage(named:"Checkmark"), for: .selected)
             checkmark.isSelected = true
+            checkmark.tag = b
             checkmark.addTarget(self, action: Selector(("checkMarkTapped:")), for:.touchUpInside)
             self.view.addSubview(checkmark)
+            let name = exchangeList.filter({$0["tag"] as! Int == b})[0]["name"]
+            checked.append(name as! String)
         }
+        
+        // draw chart
+        _ = Heatmap(sciChartSurface: sciChartSurface!, _data: data, exchangeList: checked)
     }
     
     // force landscape orientation
@@ -69,8 +77,18 @@ class ViewController: UIViewController {
             UIView.animate(withDuration: 0.5, delay: 0.1, options: .curveLinear, animations: {
                 sender.isSelected = !sender.isSelected
                 sender.transform = .identity
+                let i = sender.tag
+                let name = exchangeList.filter({$0["tag"] as! Int == i})[0]["name"] as! String
+                print(name)
                 
-                print("selected", sender.isSelected)
+                if (!sender.isSelected) {
+                    self.checked = self.checked.filter({$0 != name})
+                } else {
+                   self.checked.append(name)
+                }
+                print(self.checked)
+                // redraw chart
+                //createHeatmap(sciChartSurface: self.sciChartSurface!, _data: data, exchangeList: self.checked)
             }, completion: nil)
         }
     }
