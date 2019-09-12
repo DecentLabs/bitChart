@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7A20E367231EAE3400716936 /* chart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A20E366231EAE3400716936 /* chart.swift */; };
 		7A20E369231EB3A200716936 /* transformData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A20E368231EB3A200716936 /* transformData.swift */; };
 		7A20E36B231FF71E00716936 /* heatmap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A20E36A231FF71E00716936 /* heatmap.swift */; };
 		7A20E36D2320075800716936 /* linechart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A20E36C2320075800716936 /* linechart.swift */; };
@@ -59,7 +58,6 @@
 
 /* Begin PBXFileReference section */
 		5F127A3FFB8F8246736934D4 /* Pods_bitChart.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_bitChart.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		7A20E366231EAE3400716936 /* chart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = chart.swift; sourceTree = "<group>"; };
 		7A20E368231EB3A200716936 /* transformData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = transformData.swift; sourceTree = "<group>"; };
 		7A20E36A231FF71E00716936 /* heatmap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = heatmap.swift; sourceTree = "<group>"; };
 		7A20E36C2320075800716936 /* linechart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = linechart.swift; sourceTree = "<group>"; };
@@ -156,7 +154,6 @@
 				7A84A8B9231D4FFA00502BA1 /* Assets.xcassets */,
 				7A84A8BB231D4FFA00502BA1 /* LaunchScreen.storyboard */,
 				7A84A8BE231D4FFA00502BA1 /* Info.plist */,
-				7A20E366231EAE3400716936 /* chart.swift */,
 				7A20E368231EB3A200716936 /* transformData.swift */,
 				7A20E36A231FF71E00716936 /* heatmap.swift */,
 				7A20E36C2320075800716936 /* linechart.swift */,
@@ -373,7 +370,6 @@
 				7A20E36F2320081700716936 /* dateFormatter.swift in Sources */,
 				7A20E36D2320075800716936 /* linechart.swift in Sources */,
 				7A20E36B231FF71E00716936 /* heatmap.swift in Sources */,
-				7A20E367231EAE3400716936 /* chart.swift in Sources */,
 				7AB1D5C8231D5E2C00A430C2 /* SCIGenericWrapper.swift in Sources */,
 				7A84A8B5231D4FF900502BA1 /* ViewController.swift in Sources */,
 				7A84A8B3231D4FF900502BA1 /* AppDelegate.swift in Sources */,

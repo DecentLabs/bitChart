@@ -133,7 +133,6 @@ func createHeatmap(sciChartSurface: SCIChartSurface,
     // add colors
 //    let stops = [NSNumber(value: 0.0), NSNumber(value: 1)]
 //    let colors = [UIColor.fromARGBColorCode(0xFF000000)!,UIColor.fromARGBColorCode(0xFFc5c5c5)!]
-//
 //    heatmapRenderableSeries.colorMap = SCIColorMap.init(colors: colors, andStops: stops)
     
     
@@ -151,10 +150,20 @@ func createHeatmap(sciChartSurface: SCIChartSurface,
     xAxis.registerVisibleRangeChangedCallback { (newRange, oldRange, isAnimated, sender) in
         let min = newRange!.min.doubleData
         let max = newRange!.max.doubleData
+    
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            print("zoom", min, max)
+        }
     }
+    
+    // add chart modifiers (pan + zoom)
+    sciChartSurface.chartModifiers = SCIChartModifierCollection(childModifiers: [
+        SCIPinchZoomModifier(),
+        SCIZoomPanModifier(),
+        SCIZoomExtentsModifier()
+    ])
 
-    
     sciChartSurface.renderableSeries.add(heatmapRenderableSeries)
-    return sciChartSurface
     
+    return sciChartSurface
 }
