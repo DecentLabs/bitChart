@@ -36,23 +36,34 @@ class Heatmap {
         self._data = _data
         self.exchangeList = exchangeList
         self.data = _data.filter({exchangeList.contains($0.key)})
-        
-        self.setupDataSeries()
-        self.createAxises()
-        self.addModifiers()
-        self.addEventListeners()
-        
-        self.render()
-        
-        self.createRenderableSeries()
-        self.sciChartSurface.renderableSeries.add(heatmapRenderableSeries)
     }
     
-    func render() {
+    func start () {
+        // todo
+        setupDataSeries()
+        createAxises()
+        addModifiers()
+        addEventListeners()
+        
         clear()
         accumulate()
         normalize()
+        
+        createRenderableSeries()
+        sciChartSurface.renderableSeries.add(heatmapRenderableSeries)
     }
+    
+    func update(exchangeList: [String]) {
+        data = _data.filter({exchangeList.contains($0.key)})
+        sciChartSurface.renderableSeries.clear()
+        
+        clear()
+        accumulate()
+        normalize()
+        
+        sciChartSurface.renderableSeries.add(heatmapRenderableSeries)
+    }
+
     
     func accumulate () {
         for (name, exchange) in data! {
@@ -99,21 +110,21 @@ class Heatmap {
     
     // Declare a Heatmap Render Series and set style
     func createRenderableSeries () {
-        self.heatmapRenderableSeries = SCIFastUniformHeatmapRenderableSeries()
+        heatmapRenderableSeries = SCIFastUniformHeatmapRenderableSeries()
         heatmapRenderableSeries!.minimum = 0
         heatmapRenderableSeries!.maximum = maxZ
         heatmapRenderableSeries!.dataSeries = heatmapDataSeries
         
         // add colors
-        //    let stops = [NSNumber(value: 0.0), NSNumber(value: 1)]
-        //    let colors = [UIColor.fromARGBColorCode(0xFF000000)!,UIColor.fromARGBColorCode(0xFFc5c5c5)!]
-        //    heatmapRenderableSeries.colorMap = SCIColorMap.init(colors: colors, andStops: stops)
+//        let stops = [NSNumber(value: 0.0), NSNumber(value: 1)]
+//        let colors = [UIColor.fromARGBColorCode(0xFF000000)!,UIColor.fromARGBColorCode(0xFFc5c5c5)!]
+//        heatmapRenderableSeries!.colorMap = SCIColorMap.init(colors: colors, andStops: stops)
     }
     
     
     func setupDataSeries () {
-        self.getChartProps()
-        self.heatmapDataSeries = SCIUniformHeatmapDataSeries(typeX: .int32,
+        getChartProps()
+        heatmapDataSeries = SCIUniformHeatmapDataSeries(typeX: .int32,
                                                              y: .int32,
                                                              z: .double,
                                                              sizeX: width,
@@ -122,7 +133,7 @@ class Heatmap {
                                                              stepX: SCIGeneric(timeResolution),
                                                              startY: SCIGeneric(minPrice),
                                                              stepY: SCIGeneric(20))
-        self.zValues = heatmapDataSeries!.zValues()
+        zValues = heatmapDataSeries!.zValues()
     }
     
     // calculate heatmap props
@@ -152,19 +163,19 @@ class Heatmap {
     
     // create xy axis
     func createAxises () {
-        self.xAxis = SCINumericAxis()
-        self.xAxis!.axisTitle = "Time"
-        self.sciChartSurface.xAxes.add(self.xAxis)
+        xAxis = SCINumericAxis()
+        xAxis!.axisTitle = "Time"
+        sciChartSurface.xAxes.add(xAxis)
         
-        self.yAxis = SCINumericAxis()
-        self.yAxis!.axisTitle = "Price"
-        self.sciChartSurface.yAxes.add(self.yAxis)
+        yAxis = SCINumericAxis()
+        yAxis!.axisTitle = "Price"
+        sciChartSurface.yAxes.add(yAxis)
     }
     
     
     func addEventListeners () {
         // Register a VisibleRangeChanged callback
-        self.xAxis!.registerVisibleRangeChangedCallback { (newRange, oldRange, isAnimated, sender) in
+        xAxis!.registerVisibleRangeChangedCallback { (newRange, oldRange, isAnimated, sender) in
             let min = newRange!.min.doubleData
             let max = newRange!.max.doubleData
             
@@ -177,7 +188,7 @@ class Heatmap {
     
     // add chart modifiers (pan + zoom)
     func addModifiers () {
-        self.sciChartSurface.chartModifiers = SCIChartModifierCollection(childModifiers: [
+        sciChartSurface.chartModifiers = SCIChartModifierCollection(childModifiers: [
             SCIPinchZoomModifier(),
             SCIZoomPanModifier(),
             SCIZoomExtentsModifier()
@@ -204,9 +215,9 @@ class Heatmap {
     
     // clear
     func clear () {
-        for x in 0..<self.width {
-            for y in 0..<self.height {
-                self.zValues!.setValue(zero, atX: x, y: y)
+        for x in 0..<width {
+            for y in 0..<height {
+                zValues!.setValue(zero, atX: x, y: y)
             }
         }
     }

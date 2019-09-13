@@ -17,6 +17,7 @@ class ViewController: UIViewController {
     
     var sciChartSurface: SCIChartSurface?
     var checked: [String] = []
+    var heatmap: Heatmap?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,7 +58,8 @@ class ViewController: UIViewController {
         }
         
         // draw chart
-        _ = Heatmap(sciChartSurface: sciChartSurface!, _data: data, exchangeList: checked)
+        heatmap = Heatmap(sciChartSurface: sciChartSurface!, _data: data, exchangeList: checked)
+        heatmap!.start()
     }
     
     // force landscape orientation
@@ -70,26 +72,26 @@ class ViewController: UIViewController {
     
     // ccheckmark tapped
     @IBAction func checkMarkTapped(_ sender: UIButton) {
-        UIView.animate(withDuration: 0.5, delay: 0.1, options: .curveLinear, animations: {
+        UIView.animate(withDuration: 0.2, delay: 0, options: .curveLinear, animations: {
             sender.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
-            
         }) { (success) in
-            UIView.animate(withDuration: 0.5, delay: 0.1, options: .curveLinear, animations: {
+            UIView.animate(withDuration: 0.2, delay: 0, options: .curveLinear, animations: {
                 sender.isSelected = !sender.isSelected
                 sender.transform = .identity
+            }, completion: { _ in
                 let i = sender.tag
                 let name = exchangeList.filter({$0["tag"] as! Int == i})[0]["name"] as! String
-                print(name)
                 
+                // update exchange list
                 if (!sender.isSelected) {
                     self.checked = self.checked.filter({$0 != name})
                 } else {
-                   self.checked.append(name)
+                    self.checked.append(name)
                 }
-                print(self.checked)
+                
                 // redraw chart
-                //createHeatmap(sciChartSurface: self.sciChartSurface!, _data: data, exchangeList: self.checked)
-            }, completion: nil)
+                self.heatmap!.update(exchangeList: self.checked)
+            })
         }
     }
     
