@@ -16,6 +16,8 @@ class Heatmap {
     var _data: [String : [OrderBook]]
     var exchangeList: [String]
     
+    let zero = SCIGeneric(0.0)
+    
     var data: [String : [OrderBook]]?
     var heatmapDataSeries: SCIUniformHeatmapDataSeries?
     var heatmapRenderableSeries: SCIFastUniformHeatmapRenderableSeries?
@@ -23,13 +25,14 @@ class Heatmap {
     var xAxis: SCINumericAxis?
     var yAxis: SCINumericAxis?
     
-    let timeResolution = Int32(60 * 60) // hourly
-    let zero = SCIGeneric(0.0)
+    var timeResolution = Int32(60 * 60) // hourly
     var maxZ = log(1.0)
     var width: Int32 = 0
     var height: Int32 = 0
     var startDate: Int32 = 0
     var minPrice: Float = 0.0
+    var endDate: Int32 = 0
+    var maxPrice: Float = 0
     
     init(sciChartSurface: SCIChartSurface, _data: [String : [OrderBook]], exchangeList: [String]) {
         self.sciChartSurface = sciChartSurface
@@ -64,7 +67,6 @@ class Heatmap {
         sciChartSurface.renderableSeries.add(heatmapRenderableSeries)
     }
 
-    
     func accumulate () {
         for (name, exchange) in data! {
             
@@ -81,11 +83,14 @@ class Heatmap {
                         zValues!.setValue(SCIGeneric(currValue), atX: x, y: y)
                     }
                 }
-                for o in orderBook.asks {
-                    plot(o)
-                }
-                for o in orderBook.bids {
-                    plot(o)
+                
+                if (x >= 0) {
+                    for o in orderBook.asks {
+                        plot(o)
+                    }
+                    for o in orderBook.bids {
+                        plot(o)
+                    }
                 }
             }
             
@@ -132,7 +137,7 @@ class Heatmap {
                                                              startX: SCIGeneric(startDate),
                                                              stepX: SCIGeneric(timeResolution),
                                                              startY: SCIGeneric(minPrice),
-                                                             stepY: SCIGeneric(20))
+                                                             stepY: SCIGeneric(1))
         zValues = heatmapDataSeries!.zValues()
     }
     
@@ -147,9 +152,9 @@ class Heatmap {
             let dates = getMinMaxDates(orderbook: data![key]!)
             let prices = getMinMaxPrice(orderbook: data![key]!)
             
-            startD = dates["startDate"]! > startD ? dates["startDate"]! : startD
+            startD = startD == 0 ? dates["startDate"]! : dates["startDate"]! < startD ? dates["startDate"]! : startD
             endD = dates["endDate"]! > endD ? dates["endDate"]! : endD
-            minP = prices["minPrice"]! > minP ? prices["minPrice"]! : minP
+            minP = minP == 0 ? prices["minPrice"]! : prices["minPrice"]! < minP ? prices["minPrice"]! : minP
             maxP = prices["maxPrice"]! > maxP ? prices["maxPrice"]! : maxP
         }
         
@@ -159,16 +164,22 @@ class Heatmap {
         height = Int32(maxP - minP)
         startDate = startD
         minPrice = minP
+        endDate = endD
+        maxPrice = maxP
     }
     
     // create xy axis
     func createAxises () {
         xAxis = SCINumericAxis()
         xAxis!.axisTitle = "Time"
+        xAxis!.animateVisibleRangeChanges = true
+        xAxis?.visibleRangeLimit = SCIIntegerRange(min: SCIGeneric(startDate), max: SCIGeneric(endDate)) // todo
         sciChartSurface.xAxes.add(xAxis)
         
         yAxis = SCINumericAxis()
         yAxis!.axisTitle = "Price"
+        yAxis!.animateVisibleRangeChanges = true
+        yAxis?.visibleRangeLimit = SCIDoubleRange(min: SCIGeneric(minPrice), max: SCIGeneric(maxPrice))
         sciChartSurface.yAxes.add(yAxis)
     }
     
@@ -176,12 +187,22 @@ class Heatmap {
     func addEventListeners () {
         // Register a VisibleRangeChanged callback
         xAxis!.registerVisibleRangeChangedCallback { (newRange, oldRange, isAnimated, sender) in
-            let min = newRange!.min.doubleData
-            let max = newRange!.max.doubleData
+            let min = Int32(newRange!.min.doubleData)
+            let max = Int32(newRange!.max.doubleData)
+            let duration = Int32(max - min)
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                print("zoom", min, max)
-            }
+            self.timeResolution = duration / self.width
+            self.startDate = min
+            self.endDate = max
+            
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+//                self.sciChartSurface.renderableSeries.clear()
+//                self.clear()
+//                self.accumulate()
+//                self.normalize()
+//                self.sciChartSurface.renderableSeries.add(self.heatmapRenderableSeries)
+//                print("change event: runs too much todo")
+//            }
         }
     }
     
