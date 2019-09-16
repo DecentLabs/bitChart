@@ -18,6 +18,24 @@ class ViewController: UIViewController {
     var sciChartSurface: SCIChartSurface?
     var checked: [String] = []
     var heatmap: Heatmap?
+    
+    func createSpinnerView() {
+        let child = SpinnerViewController()
+        
+        // add the spinner view controller
+        addChild(child)
+        child.view.frame = view.frame
+        view.addSubview(child.view)
+        child.didMove(toParent: self)
+        
+        // wait two seconds to simulate some work happening
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            // then remove the spinner view controller
+            child.willMove(toParent: nil)
+            child.view.removeFromSuperview()
+            child.removeFromParent()
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,6 +43,7 @@ class ViewController: UIViewController {
         // force landscape orientation
         let value = UIInterfaceOrientation.landscapeLeft.rawValue
         UIDevice.current.setValue(value, forKey: "orientation")
+        
         
         // Create a SCIChartSurface. This is a UIView so can be added directly to the UI
         let chartWidth = self.view.frame.width - 100
@@ -74,6 +93,7 @@ class ViewController: UIViewController {
     @IBAction func checkMarkTapped(_ sender: UIButton) {
         UIView.animate(withDuration: 0.2, delay: 0, options: .curveLinear, animations: {
             sender.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
+            self.createSpinnerView()
         }) { (success) in
             UIView.animate(withDuration: 0.2, delay: 0, options: .curveLinear, animations: {
                 sender.isSelected = !sender.isSelected
@@ -88,7 +108,6 @@ class ViewController: UIViewController {
                 } else {
                     self.checked.append(name)
                 }
-                
                 // redraw chart
                 self.heatmap!.update(exchangeList: self.checked)
             })

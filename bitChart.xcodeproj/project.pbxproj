@@ -19,6 +19,7 @@
 		7A84A8BD231D4FFA00502BA1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7A84A8BB231D4FFA00502BA1 /* LaunchScreen.storyboard */; };
 		7A84A8C8231D4FFB00502BA1 /* bitChartTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A84A8C7231D4FFB00502BA1 /* bitChartTests.swift */; };
 		7A84A8D3231D4FFB00502BA1 /* bitChartUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A84A8D2231D4FFB00502BA1 /* bitChartUITests.swift */; };
+		7A8B44BC232F8AB2000270AE /* spinner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A8B44BB232F8AB2000270AE /* spinner.swift */; };
 		7AB1D5C4231D5D2500A430C2 /* SciChart.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AB1D5C3231D5D2500A430C2 /* SciChart.framework */; };
 		7AB1D5C5231D5D2500A430C2 /* SciChart.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7AB1D5C3231D5D2500A430C2 /* SciChart.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7AB1D5C8231D5E2C00A430C2 /* SCIGenericWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB1D5C7231D5E2C00A430C2 /* SCIGenericWrapper.swift */; };
@@ -77,6 +78,7 @@
 		7A84A8CE231D4FFB00502BA1 /* bitChartUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = bitChartUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A84A8D2231D4FFB00502BA1 /* bitChartUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = bitChartUITests.swift; sourceTree = "<group>"; };
 		7A84A8D4231D4FFB00502BA1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7A8B44BB232F8AB2000270AE /* spinner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = spinner.swift; sourceTree = "<group>"; };
 		7AB1D5B7231D53DC00A430C2 /* SciChart.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SciChart.framework; path = ../../SciChart_iOS_v2.5.0.2523_SDK/SciChart.framework; sourceTree = "<group>"; };
 		7AB1D5C3231D5D2500A430C2 /* SciChart.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SciChart.framework; sourceTree = "<group>"; };
 		7AB1D5C7231D5E2C00A430C2 /* SCIGenericWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SCIGenericWrapper.swift; path = SciChart.framework/SwiftUtil/SCIGenericWrapper.swift; sourceTree = "<group>"; };
@@ -161,6 +163,7 @@
 				7A20E36C2320075800716936 /* linechart.swift */,
 				7A20E36E2320081700716936 /* dateFormatter.swift */,
 				7AEEA38F232A908C004952EC /* heatmaprefact.swift */,
+				7A8B44BB232F8AB2000270AE /* spinner.swift */,
 			);
 			path = bitChart;
 			sourceTree = "<group>";
@@ -373,6 +376,7 @@
 				7A20E36F2320081700716936 /* dateFormatter.swift in Sources */,
 				7A20E36D2320075800716936 /* linechart.swift in Sources */,
 				7A20E36B231FF71E00716936 /* heatmap.swift in Sources */,
+				7A8B44BC232F8AB2000270AE /* spinner.swift in Sources */,
 				7AEEA390232A908C004952EC /* heatmaprefact.swift in Sources */,
 				7AB1D5C8231D5E2C00A430C2 /* SCIGenericWrapper.swift in Sources */,
 				7A84A8B5231D4FF900502BA1 /* ViewController.swift in Sources */,

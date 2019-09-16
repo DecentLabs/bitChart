@@ -75,7 +75,7 @@ class Heatmap {
                 func plot(_ o: LimitOrder) {
                     let y = Int32(o.price - minPrice)
                     let q = Double(o.quantity)
-                    if (y > 0 || q > 0) {
+                    if (y >= 0 || q > 0) {
                         var currValue = zValues!.valueAt(x: x, y: y).doubleData
                         currValue += q
                         zValues!.setValue(SCIGeneric(currValue), atX: x, y: y)
@@ -179,7 +179,7 @@ class Heatmap {
             let min = newRange!.min.doubleData
             let max = newRange!.max.doubleData
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                 print("zoom", min, max)
             }
         }
