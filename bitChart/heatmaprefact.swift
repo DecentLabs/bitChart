@@ -16,7 +16,7 @@ class Heatmap {
     var _data: [String : [OrderBook]]
     var exchangeList: [String]
     
-    let zero = SCIGeneric(0.0)
+    private let zero = SCIGeneric(0.0)
     
     var data: [String : [OrderBook]]?
     var heatmapDataSeries: SCIUniformHeatmapDataSeries?
@@ -24,6 +24,7 @@ class Heatmap {
     var zValues: SCIArrayController2D?
     var xAxis: SCINumericAxis?
     var yAxis: SCINumericAxis?
+    private var _timer: Timer?
     
     var timeResolution = Int32(60 * 60) // hourly
     var maxZ = log(1.0)
@@ -33,6 +34,7 @@ class Heatmap {
     var minPrice: Float = 0.0
     var endDate: Int32 = 0
     var maxPrice: Float = 0
+    var updating: Bool = false
     
     init(sciChartSurface: SCIChartSurface, _data: [String : [OrderBook]], exchangeList: [String]) {
         self.sciChartSurface = sciChartSurface
@@ -42,32 +44,37 @@ class Heatmap {
     }
     
     func start () {
-        // todo
-        setupDataSeries()
-        createAxises()
-        addModifiers()
-        addEventListeners()
-        
-        clear()
-        accumulate()
-        normalize()
-        
-        createRenderableSeries()
-        sciChartSurface.renderableSeries.add(heatmapRenderableSeries)
+        SCIUpdateSuspender.usingWithSuspendable(sciChartSurface) {
+            self.setupDataSeries()
+            self.createAxises()
+            self.addModifiers()
+            self.addEventListeners()
+            
+            self.clear()
+            self.accumulate()
+            self.normalize()
+            
+            self.createRenderableSeries()
+            self.sciChartSurface.renderableSeries.add(self.heatmapRenderableSeries)
+        }
     }
     
-    func update(exchangeList: [String]) {
+    func filterData(list: [String]) {
+        exchangeList = list
         data = _data.filter({exchangeList.contains($0.key)})
-        sciChartSurface.renderableSeries.clear()
-        
-        clear()
-        accumulate()
-        normalize()
-        
-        sciChartSurface.renderableSeries.add(heatmapRenderableSeries)
+    }
+    
+    func reRender() {
+        SCIUpdateSuspender.usingWithSuspendable(sciChartSurface) {
+            self.sciChartSurface.renderableSeries.clear()
+            self.clear()
+            self.accumulate()
+            self.normalize()
+            self.sciChartSurface.renderableSeries.add(self.heatmapRenderableSeries)
+        }
     }
 
-    func accumulate () {
+    private func accumulate () {
         for (name, exchange) in data! {
             
             // loop in orderbook
@@ -99,7 +106,7 @@ class Heatmap {
     
     
     // normalize with logarithm
-    func normalize () {
+    private func normalize () {
         for x in 0..<width {
             for y in 0..<height {
                 let currValue = zValues!.valueAt(x: x, y: y).doubleData
@@ -114,7 +121,7 @@ class Heatmap {
     
     
     // Declare a Heatmap Render Series and set style
-    func createRenderableSeries () {
+    private func createRenderableSeries () {
         heatmapRenderableSeries = SCIFastUniformHeatmapRenderableSeries()
         heatmapRenderableSeries!.minimum = 0
         heatmapRenderableSeries!.maximum = maxZ
@@ -127,7 +134,7 @@ class Heatmap {
     }
     
     
-    func setupDataSeries () {
+    private func setupDataSeries () {
         getChartProps()
         heatmapDataSeries = SCIUniformHeatmapDataSeries(typeX: .int32,
                                                              y: .int32,
@@ -142,7 +149,7 @@ class Heatmap {
     }
     
     // calculate heatmap props
-    func getChartProps () {
+    private func getChartProps () {
         var startD: Int32 = 0
         var endD: Int32 = 0
         var minP: Float = 0.0
@@ -169,46 +176,54 @@ class Heatmap {
     }
     
     // create xy axis
-    func createAxises () {
+    private func createAxises () {
         xAxis = SCINumericAxis()
         xAxis!.axisTitle = "Time"
-        xAxis!.animateVisibleRangeChanges = true
         xAxis?.visibleRangeLimit = SCIIntegerRange(min: SCIGeneric(startDate), max: SCIGeneric(endDate)) // todo
         sciChartSurface.xAxes.add(xAxis)
         
         yAxis = SCINumericAxis()
         yAxis!.axisTitle = "Price"
-        yAxis!.animateVisibleRangeChanges = true
-        yAxis?.visibleRangeLimit = SCIDoubleRange(min: SCIGeneric(minPrice), max: SCIGeneric(maxPrice))
+        yAxis?.autoRange = .always
+        //yAxis?.visibleRangeLimit = SCIDoubleRange(min: SCIGeneric(minPrice), max: SCIGeneric(maxPrice))
         sciChartSurface.yAxes.add(yAxis)
     }
     
+    @objc func resample (_ timer: Timer) {
+        print("update")
+        heatmapDataSeries?.startX = SCIGeneric(startDate)
+        heatmapDataSeries?.stepX = SCIGeneric(timeResolution)
+        reRender()
+        updating = false
+    }
     
-    func addEventListeners () {
+    private func addEventListeners () {
         // Register a VisibleRangeChanged callback
         xAxis!.registerVisibleRangeChangedCallback { (newRange, oldRange, isAnimated, sender) in
             let min = Int32(newRange!.min.doubleData)
             let max = Int32(newRange!.max.doubleData)
             let duration = Int32(max - min)
-            
+
             self.timeResolution = duration / self.width
             self.startDate = min
             self.endDate = max
-            
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-//                self.sciChartSurface.renderableSeries.clear()
-//                self.clear()
-//                self.accumulate()
-//                self.normalize()
-//                self.sciChartSurface.renderableSeries.add(self.heatmapRenderableSeries)
-//                print("change event: runs too much todo")
-//            }
+
+            print(self.updating, "updating")
+            if (!self.updating) {
+                self._timer?.invalidate()
+                self._timer = Timer.scheduledTimer(timeInterval: 0.5,
+                                                   target: self,
+                                                   selector: #selector(self.resample),
+                                                   userInfo: nil,
+                                                   repeats: false)
+                self.updating = true
+            }
         }
     }
     
     
     // add chart modifiers (pan + zoom)
-    func addModifiers () {
+    private func addModifiers () {
         sciChartSurface.chartModifiers = SCIChartModifierCollection(childModifiers: [
             SCIPinchZoomModifier(),
             SCIZoomPanModifier(),
@@ -218,7 +233,7 @@ class Heatmap {
     
     
     // get date range
-    func getMinMaxDates(orderbook: [OrderBook]) -> [String: Int32] {
+    private func getMinMaxDates(orderbook: [OrderBook]) -> [String: Int32] {
         let startDate = Int32(dateToTimestamp(date: orderbook.first!.timestamp))
         let endDate = Int32(dateToTimestamp(date: orderbook.last!.timestamp))
         
@@ -227,7 +242,7 @@ class Heatmap {
     
     
     // get price range
-    func getMinMaxPrice(orderbook: [OrderBook]) -> [String: Float] {
+    private func getMinMaxPrice(orderbook: [OrderBook]) -> [String: Float] {
         let maxPrice = orderbook.map({$0.asks.last!.price}).max()!
         let minPrice = orderbook.map({$0.bids.last!.price}).min()!
         
@@ -235,7 +250,7 @@ class Heatmap {
     }
     
     // clear
-    func clear () {
+    private func clear () {
         for x in 0..<width {
             for y in 0..<height {
                 zValues!.setValue(zero, atX: x, y: y)

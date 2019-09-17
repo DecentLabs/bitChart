@@ -109,7 +109,8 @@ class ViewController: UIViewController {
                     self.checked.append(name)
                 }
                 // redraw chart
-                self.heatmap!.update(exchangeList: self.checked)
+                self.heatmap!.filterData(list: self.checked)
+                self.heatmap!.reRender()
             })
         }
     }
