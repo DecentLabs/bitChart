@@ -10,14 +10,7 @@ import UIKit
 import SciChart
 import Foundation
 
-let data = getExchangeData()
-var exchangeList: [[String: Any]] = []
-
 class ViewController: UIViewController {
-    
-    var sciChartSurface: SCIChartSurface?
-    var checked: [String] = []
-    var heatmap: Heatmap?
     
     func createSpinnerView() {
         let child = SpinnerViewController()
@@ -46,9 +39,9 @@ class ViewController: UIViewController {
         
         
         // Create a SCIChartSurface. This is a UIView so can be added directly to the UI
-        let chartWidth = self.view.frame.width - 100
+        chartWidth = self.view.frame.width - 100
         let chartHeight = self.view.frame.height
-        let chartView = CGRect(x: 0, y: 0, width: chartWidth, height: chartHeight)
+        let chartView = CGRect(x: 0, y: 0, width: chartWidth!, height: chartHeight)
         sciChartSurface = SCIChartSurface(frame: chartView)
         sciChartSurface?.translatesAutoresizingMaskIntoConstraints = true
         self.view.addSubview(sciChartSurface!)
@@ -65,28 +58,20 @@ class ViewController: UIViewController {
         let btnSize = 60
         for (b, _) in exchangeList.enumerated() {
             let checkmark = UIButton(type: UIButton.ButtonType.custom) as UIButton
-            checkmark.frame = CGRect(x: Int(20 + chartWidth), y: b * btnSize + 40, width: btnSize, height: btnSize)
+            checkmark.frame = CGRect(x: Int(20 + chartWidth!), y: b * btnSize + 40, width: btnSize, height: btnSize)
             checkmark.setImage(UIImage(named:"Checkmarkempty"), for: .normal)
             checkmark.setImage(UIImage(named:"Checkmark"), for: .selected)
             checkmark.isSelected = true
             checkmark.tag = b
             checkmark.addTarget(self, action: Selector(("checkMarkTapped:")), for:.touchUpInside)
             self.view.addSubview(checkmark)
-            let name = exchangeList.filter({$0["tag"] as! Int == b})[0]["name"]
+            let name = exchangeList.filter({$0["tag"] as! Int == b})[0]["name"] // todo
             checked.append(name as! String)
         }
         
         // draw chart
         heatmap = Heatmap(sciChartSurface: sciChartSurface!, _data: data, exchangeList: checked)
         heatmap!.start()
-    }
-    
-    // force landscape orientation
-    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return .landscapeLeft
-    }
-    override var shouldAutorotate: Bool {
-        return true
     }
     
     // ccheckmark tapped
@@ -100,19 +85,27 @@ class ViewController: UIViewController {
                 sender.transform = .identity
             }, completion: { _ in
                 let i = sender.tag
-                let name = exchangeList.filter({$0["tag"] as! Int == i})[0]["name"] as! String
+                let name = exchangeList.filter({$0["tag"] as! Int == i})[0]["name"] as! String // todo
                 
                 // update exchange list
                 if (!sender.isSelected) {
-                    self.checked = self.checked.filter({$0 != name})
+                    checked = checked.filter({$0 != name})
                 } else {
-                    self.checked.append(name)
+                    checked.append(name)
                 }
                 // redraw chart
-                self.heatmap!.filterData(list: self.checked)
-                self.heatmap!.reRender()
+                heatmap!.filterData(list: checked)
+                heatmap!.render()
             })
         }
+    }
+    
+    // force landscape orientation
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .landscapeLeft
+    }
+    override var shouldAutorotate: Bool {
+        return true
     }
     
     override func didReceiveMemoryWarning() {

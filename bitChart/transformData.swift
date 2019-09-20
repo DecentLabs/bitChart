@@ -83,7 +83,7 @@ func parseCSV(fileName: String, cutFirst: Bool) -> [[String]] {
     for (i, row) in stringRows.enumerated() {
         let column = row.components(separatedBy: ",")
         if ((cutFirst == false) || (cutFirst == true && i != 0)) {
-           dataRows.append(column)
+            dataRows.append(column)
         }
     }
     

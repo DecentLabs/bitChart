@@ -7,8 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7A20E369231EB3A200716936 /* transformData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A20E368231EB3A200716936 /* transformData.swift */; };
-		7A20E36B231FF71E00716936 /* heatmap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A20E36A231FF71E00716936 /* heatmap.swift */; };
+		7A20E36B231FF71E00716936 /* transformData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A20E36A231FF71E00716936 /* transformData.swift */; };
 		7A20E36D2320075800716936 /* linechart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A20E36C2320075800716936 /* linechart.swift */; };
 		7A20E36F2320081700716936 /* dateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A20E36E2320081700716936 /* dateFormatter.swift */; };
 		7A20E3712326549C00716936 /* orderbook2.csv in Resources */ = {isa = PBXBuildFile; fileRef = 7A20E3702326549C00716936 /* orderbook2.csv */; };
@@ -19,12 +18,13 @@
 		7A84A8BD231D4FFA00502BA1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7A84A8BB231D4FFA00502BA1 /* LaunchScreen.storyboard */; };
 		7A84A8C8231D4FFB00502BA1 /* bitChartTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A84A8C7231D4FFB00502BA1 /* bitChartTests.swift */; };
 		7A84A8D3231D4FFB00502BA1 /* bitChartUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A84A8D2231D4FFB00502BA1 /* bitChartUITests.swift */; };
-		7A8B44BC232F8AB2000270AE /* spinner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A8B44BB232F8AB2000270AE /* spinner.swift */; };
 		7AB1D5C4231D5D2500A430C2 /* SciChart.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AB1D5C3231D5D2500A430C2 /* SciChart.framework */; };
 		7AB1D5C5231D5D2500A430C2 /* SciChart.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7AB1D5C3231D5D2500A430C2 /* SciChart.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7AB1D5C8231D5E2C00A430C2 /* SCIGenericWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB1D5C7231D5E2C00A430C2 /* SCIGenericWrapper.swift */; };
 		7AB1D5CA231E78B700A430C2 /* orderbook.csv in Resources */ = {isa = PBXBuildFile; fileRef = 7AB1D5C9231E78B700A430C2 /* orderbook.csv */; };
-		7AEEA390232A908C004952EC /* heatmaprefact.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AEEA38F232A908C004952EC /* heatmaprefact.swift */; };
+		7AEEA390232A908C004952EC /* heatmap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AEEA38F232A908C004952EC /* heatmap.swift */; };
+		7AEEA3982333B8EE004952EC /* global.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AEEA3972333B8EE004952EC /* global.swift */; };
+		7AEEA39C2333CA36004952EC /* spinnerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AEEA39B2333CA36004952EC /* spinnerViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,8 +60,7 @@
 
 /* Begin PBXFileReference section */
 		5F127A3FFB8F8246736934D4 /* Pods_bitChart.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_bitChart.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		7A20E368231EB3A200716936 /* transformData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = transformData.swift; sourceTree = "<group>"; };
-		7A20E36A231FF71E00716936 /* heatmap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = heatmap.swift; sourceTree = "<group>"; };
+		7A20E36A231FF71E00716936 /* transformData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = transformData.swift; sourceTree = "<group>"; };
 		7A20E36C2320075800716936 /* linechart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = linechart.swift; sourceTree = "<group>"; };
 		7A20E36E2320081700716936 /* dateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dateFormatter.swift; sourceTree = "<group>"; };
 		7A20E3702326549C00716936 /* orderbook2.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = orderbook2.csv; sourceTree = "<group>"; };
@@ -78,12 +77,13 @@
 		7A84A8CE231D4FFB00502BA1 /* bitChartUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = bitChartUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A84A8D2231D4FFB00502BA1 /* bitChartUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = bitChartUITests.swift; sourceTree = "<group>"; };
 		7A84A8D4231D4FFB00502BA1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		7A8B44BB232F8AB2000270AE /* spinner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = spinner.swift; sourceTree = "<group>"; };
 		7AB1D5B7231D53DC00A430C2 /* SciChart.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SciChart.framework; path = ../../SciChart_iOS_v2.5.0.2523_SDK/SciChart.framework; sourceTree = "<group>"; };
 		7AB1D5C3231D5D2500A430C2 /* SciChart.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SciChart.framework; sourceTree = "<group>"; };
 		7AB1D5C7231D5E2C00A430C2 /* SCIGenericWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SCIGenericWrapper.swift; path = SciChart.framework/SwiftUtil/SCIGenericWrapper.swift; sourceTree = "<group>"; };
 		7AB1D5C9231E78B700A430C2 /* orderbook.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = orderbook.csv; sourceTree = "<group>"; };
-		7AEEA38F232A908C004952EC /* heatmaprefact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = heatmaprefact.swift; sourceTree = "<group>"; };
+		7AEEA38F232A908C004952EC /* heatmap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = heatmap.swift; sourceTree = "<group>"; };
+		7AEEA3972333B8EE004952EC /* global.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = global.swift; sourceTree = "<group>"; };
+		7AEEA39B2333CA36004952EC /* spinnerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = spinnerViewController.swift; sourceTree = "<group>"; };
 		9A4E2FA6E476B127D6D98AEC /* Pods-bitChart.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bitChart.release.xcconfig"; path = "Target Support Files/Pods-bitChart/Pods-bitChart.release.xcconfig"; sourceTree = "<group>"; };
 		9F1AC4CB03EA424917377C13 /* Pods-bitChart.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bitChart.debug.xcconfig"; path = "Target Support Files/Pods-bitChart/Pods-bitChart.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -150,20 +150,18 @@
 		7A84A8B1231D4FF900502BA1 /* bitChart */ = {
 			isa = PBXGroup;
 			children = (
-				7A20E3702326549C00716936 /* orderbook2.csv */,
-				7AB1D5C9231E78B700A430C2 /* orderbook.csv */,
+				7AEEA39A2333B9CB004952EC /* data */,
+				7AEEA3992333B9AF004952EC /* utils */,
+				7AEEA3922333B55D004952EC /* Models */,
+				7AEEA3912333B50A004952EC /* viewControllers */,
 				7A84A8B2231D4FF900502BA1 /* AppDelegate.swift */,
-				7A84A8B4231D4FF900502BA1 /* ViewController.swift */,
 				7A84A8B6231D4FF900502BA1 /* Main.storyboard */,
 				7A84A8B9231D4FFA00502BA1 /* Assets.xcassets */,
 				7A84A8BB231D4FFA00502BA1 /* LaunchScreen.storyboard */,
 				7A84A8BE231D4FFA00502BA1 /* Info.plist */,
-				7A20E368231EB3A200716936 /* transformData.swift */,
-				7A20E36A231FF71E00716936 /* heatmap.swift */,
+				7A20E36A231FF71E00716936 /* transformData.swift */,
 				7A20E36C2320075800716936 /* linechart.swift */,
-				7A20E36E2320081700716936 /* dateFormatter.swift */,
-				7AEEA38F232A908C004952EC /* heatmaprefact.swift */,
-				7A8B44BB232F8AB2000270AE /* spinner.swift */,
+				7AEEA38F232A908C004952EC /* heatmap.swift */,
 			);
 			path = bitChart;
 			sourceTree = "<group>";
@@ -184,6 +182,40 @@
 				7A84A8D4231D4FFB00502BA1 /* Info.plist */,
 			);
 			path = bitChartUITests;
+			sourceTree = "<group>";
+		};
+		7AEEA3912333B50A004952EC /* viewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				7A84A8B4231D4FF900502BA1 /* ViewController.swift */,
+				7AEEA39B2333CA36004952EC /* spinnerViewController.swift */,
+			);
+			path = viewControllers;
+			sourceTree = "<group>";
+		};
+		7AEEA3922333B55D004952EC /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				7AEEA3972333B8EE004952EC /* global.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		7AEEA3992333B9AF004952EC /* utils */ = {
+			isa = PBXGroup;
+			children = (
+				7A20E36E2320081700716936 /* dateFormatter.swift */,
+			);
+			path = utils;
+			sourceTree = "<group>";
+		};
+		7AEEA39A2333B9CB004952EC /* data */ = {
+			isa = PBXGroup;
+			children = (
+				7AB1D5C9231E78B700A430C2 /* orderbook.csv */,
+				7A20E3702326549C00716936 /* orderbook2.csv */,
+			);
+			path = data;
 			sourceTree = "<group>";
 		};
 		C139504145532864D881186A /* Frameworks */ = {
@@ -373,15 +405,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7AEEA3982333B8EE004952EC /* global.swift in Sources */,
+				7AEEA39C2333CA36004952EC /* spinnerViewController.swift in Sources */,
 				7A20E36F2320081700716936 /* dateFormatter.swift in Sources */,
 				7A20E36D2320075800716936 /* linechart.swift in Sources */,
-				7A20E36B231FF71E00716936 /* heatmap.swift in Sources */,
-				7A8B44BC232F8AB2000270AE /* spinner.swift in Sources */,
-				7AEEA390232A908C004952EC /* heatmaprefact.swift in Sources */,
+				7A20E36B231FF71E00716936 /* transformData.swift in Sources */,
+				7AEEA390232A908C004952EC /* heatmap.swift in Sources */,
 				7AB1D5C8231D5E2C00A430C2 /* SCIGenericWrapper.swift in Sources */,
 				7A84A8B5231D4FF900502BA1 /* ViewController.swift in Sources */,
 				7A84A8B3231D4FF900502BA1 /* AppDelegate.swift in Sources */,
-				7A20E369231EB3A200716936 /* transformData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
