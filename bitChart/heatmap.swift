@@ -28,7 +28,7 @@ class Heatmap {
     var loaded = false
     
     var timeResolution = Int32(60 * 60) // hourly
-    var maxZ = log(0.0)
+    var maxZ: Double = 0
     var width: Int32 = 0
     var height: Int32 = 0
     var startDate: Int32 = 0
@@ -86,7 +86,7 @@ class Heatmap {
         yAxis = SCINumericAxis()
         yAxis!.axisTitle = "Price"
         yAxis?.autoRange = .always
-        //yAxis?.visibleRangeLimit = SCIDoubleRange(min: SCIGeneric(minPrice), max: SCIGeneric(maxPrice))
+        // yAxis?.visibleRangeLimit = SCIDoubleRange(min: SCIGeneric(minPrice), max: SCIGeneric(maxPrice))
         sciChartSurface.yAxes.add(yAxis)
     }
     
@@ -102,6 +102,7 @@ class Heatmap {
     
 
     private func accumulate () {
+        print("acc")
         for (name, exchange) in data! {
             
             // loop in orderbook
@@ -134,31 +135,43 @@ class Heatmap {
     
     
     // normalize with logarithm
-    private func normalize () {
+//    private func normalize () {
+//        for x in 0..<width {
+//            for y in 0..<height {
+//                let currValue = zValues!.valueAt(x: x, y: y).doubleData
+//                if (currValue > 0) {
+//                    let v = log(currValue + 1)
+//                    maxZ = v > maxZ ? v : maxZ
+//                    heatmapDataSeries?.updateZ(atXIndex: x, yIndex: y, withValue: SCIGeneric(v))
+//                }
+//            }
+//        }
+//    }
+    
+    // getmax wip todo
+    private func getMax () {
+        maxZ = Double(0)
         for x in 0..<width {
             for y in 0..<height {
                 let currValue = zValues!.valueAt(x: x, y: y).doubleData
-                if (currValue > 0) {
-                    let v = log(currValue + 1) // +1
-                    maxZ = v > maxZ ? v : maxZ
-                    heatmapDataSeries?.updateZ(atXIndex: x, yIndex: y, withValue: SCIGeneric(v))
-                }
+                maxZ = currValue > maxZ ? currValue : maxZ
             }
         }
+        heatmapRenderableSeries?.maximum = maxZ
     }
     
     
     // Declare a Heatmap Render Series and set style
     private func createRenderableSeries () {
         heatmapRenderableSeries = SCIFastUniformHeatmapRenderableSeries()
-        heatmapRenderableSeries!.minimum = 0
+        heatmapRenderableSeries!.minimum = Double(0)
         heatmapRenderableSeries!.maximum = maxZ
         heatmapRenderableSeries!.dataSeries = heatmapDataSeries
         
-        // add colors
-        //        let stops = [NSNumber(value: 0.0), NSNumber(value: 1)]
-        //        let colors = [UIColor.fromARGBColorCode(0xFF000000)!,UIColor.fromARGBColorCode(0xFFc5c5c5)!]
-        //        heatmapRenderableSeries!.colorMap = SCIColorMap.init(colors: colors, andStops: stops)
+         //add colors
+//        let stops = [NSNumber(value: 0.0), NSNumber(value: 1)]
+//        let colors = [UIColor.fromARGBColorCode(0xFF000000)!,UIColor.fromARGBColorCode(0xFFc5c5c5)!]
+//        heatmapRenderableSeries!.colorMap = SCIColorMap.init(colors: colors, andStops: stops)
     }
     
 
@@ -187,18 +200,16 @@ class Heatmap {
     }
     
     func render () {
-        print(0)
-        DispatchQueue(label: "recalc").async {
+//        DispatchQueue(label: "recalc").async {
             SCIUpdateSuspender.usingWithSuspendable(self.sciChartSurface, with: {
                 self.heatmapDataSeries?.startX = SCIGeneric(self.startDate)
                 self.heatmapDataSeries?.stepX = SCIGeneric(self.timeResolution)
                 self.clear()
                 self.accumulate()
-                self.normalize()
-                self.heatmapRenderableSeries!.maximum = self.maxZ
-                print(1)
+                // self.normalize()
+                self.getMax()
             })
-        }
+//        }
     }
     
 //    @objc func resample (_ timer: Timer) {
