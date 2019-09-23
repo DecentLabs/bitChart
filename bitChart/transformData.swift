@@ -9,8 +9,8 @@
 import Foundation
 
 struct LimitOrder {
-    let price: Float
-    let quantity: Float
+    let price: Int32
+    var quantity: Float
 }
 
 struct OrderBook {
@@ -20,14 +20,19 @@ struct OrderBook {
 }
 
 func getExchangeData() -> [String : [OrderBook]] {
+    NSLog("transform data start")
     
     let dataRows = parseCSV(fileName: "orderbook2", cutFirst: false)
+    NSLog("csv parsed")
     
     var exchangeData = [String: [OrderBook]]()
     
     let dataLength = 200
     let depth = dataLength / 2 - 1
     
+    print(dataRows.count, "datarows count")
+    
+    NSLog("transform loop starts")
     for row in dataRows {
         let name = row[0]
         let usd = (name == "bitmex")
@@ -45,30 +50,46 @@ func getExchangeData() -> [String : [OrderBook]] {
         var bids: [LimitOrder] = []
         bids.reserveCapacity(dataLength / 2)
         
+        
         for i in 0...(depth) {
             let pos = i * 2
             let a = parseLimitOrder(row: asksData, pos: pos, usd: usd)
             let b = parseLimitOrder(row: bidsData, pos: pos, usd: usd)
+
             
+            // refact
             if (a.price > 0) {
-                asks.append(a)
+                if let i = asks.firstIndex(where: { $0.price == a.price }) {
+                    asks[i].quantity += a.quantity
+                } else {
+                    asks.append(a)
+                }
             }
+            
             if (b.price > 0) {
-                bids.append(b)
+                if let i = bids.firstIndex(where: { $0.price == b.price }) {
+                    bids[i].quantity += b.quantity
+                } else {
+                    bids.append(b)
+                }
             }
         }
         
         exchangeData[name, default: []].append(OrderBook(timestamp: date, bids: bids, asks: asks))
     }
     
+    NSLog("data transformed")
     return exchangeData
 }
 
 
 func parseLimitOrder(row: [String], pos: Int, usd: Bool) -> LimitOrder {
-    let p = (row[pos] as NSString).floatValue
+    var floatP: Float = (row[pos] as NSString).floatValue
     let q = (row[pos + 1] as NSString).floatValue
-    let _q = usd ? (q / p) : q
+    let _q = usd ? (q / floatP) : q
+    floatP.round()
+    let p = Int32(floatP)
+    
     return LimitOrder(price: p, quantity: _q)
 }
 
@@ -116,7 +137,7 @@ func cleanRows(file:String) -> String {
 // for older orderbook
 func getData() -> [OrderBook] {
     
-    var dataRows = parseCSV(fileName: "orderbook", cutFirst: true)
+    let dataRows = parseCSV(fileName: "orderbook", cutFirst: true)
     
     let columns = dataRows[0].count;
     let depth = (columns - 2) / 4

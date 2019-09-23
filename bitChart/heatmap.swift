@@ -32,11 +32,12 @@ class Heatmap {
     var width: Int32 = 0
     var height: Int32 = 0
     var startDate: Int32 = 0
-    var minPrice: Float = 0.0
+    var minPrice: Int32 = 0
     var endDate: Int32 = 0
-    var maxPrice: Float = 0
+    var maxPrice: Int32 = 0
     
     init(sciChartSurface: SCIChartSurface, _data: [String : [OrderBook]], exchangeList: [String]) {
+        NSLog("init heatmap")
         self.sciChartSurface = sciChartSurface
         self._data = _data
         self.exchangeList = exchangeList
@@ -45,15 +46,23 @@ class Heatmap {
     
     func start () {
         SCIUpdateSuspender.usingWithSuspendable(sciChartSurface) {
+            NSLog("1")
             self.setupDataSeries()
+            NSLog("2")
             self.createAxises()
+            NSLog("3")
             self.addModifiers()
+            NSLog("4")
             
             self.render()
+            NSLog("5")
             self.addEventListeners()
+            NSLog("6")
             
             self.createRenderableSeries()
+            NSLog("7")
             self.sciChartSurface.renderableSeries.add(self.heatmapRenderableSeries)
+            NSLog("8")
         }
     }
     
@@ -85,8 +94,8 @@ class Heatmap {
         
         yAxis = SCINumericAxis()
         yAxis!.axisTitle = "Price"
-        yAxis?.autoRange = .always
-        // yAxis?.visibleRangeLimit = SCIDoubleRange(min: SCIGeneric(minPrice), max: SCIGeneric(maxPrice))
+//        yAxis?.autoRange = .always
+         yAxis?.visibleRangeLimit = SCIDoubleRange(min: SCIGeneric(minPrice), max: SCIGeneric(maxPrice))
         sciChartSurface.yAxes.add(yAxis)
     }
     
@@ -98,11 +107,9 @@ class Heatmap {
             SCIZoomExtentsModifier()
             ])
     }
-    
-    
 
     private func accumulate () {
-        print("acc")
+        NSLog("accumulate started")
         for (name, exchange) in data! {
             
             // loop in orderbook
@@ -116,11 +123,12 @@ class Heatmap {
                         var currValue = zValues!.valueAt(x: x, y: y).doubleData
                         currValue += q
                         heatmapDataSeries?.updateZ(atXIndex: x, yIndex: y, withValue: SCIGeneric(currValue))
+                        
                     }
                 }
                 
                 
-                if (x >= 0) {
+                if (x >= 0 && x <= width) {
                     for o in orderBook.asks {
                         plot(o)
                     }
@@ -134,22 +142,9 @@ class Heatmap {
     }
     
     
-    // normalize with logarithm
-//    private func normalize () {
-//        for x in 0..<width {
-//            for y in 0..<height {
-//                let currValue = zValues!.valueAt(x: x, y: y).doubleData
-//                if (currValue > 0) {
-//                    let v = log(currValue + 1)
-//                    maxZ = v > maxZ ? v : maxZ
-//                    heatmapDataSeries?.updateZ(atXIndex: x, yIndex: y, withValue: SCIGeneric(v))
-//                }
-//            }
-//        }
-//    }
-    
     // getmax wip todo
     private func getMax () {
+        NSLog("getmax")
         maxZ = Double(0)
         for x in 0..<width {
             for y in 0..<height {
@@ -157,7 +152,7 @@ class Heatmap {
                 maxZ = currValue > maxZ ? currValue : maxZ
             }
         }
-        heatmapRenderableSeries?.maximum = maxZ
+        heatmapRenderableSeries?.maximum = maxZ / 2
     }
     
     
@@ -165,19 +160,20 @@ class Heatmap {
     private func createRenderableSeries () {
         heatmapRenderableSeries = SCIFastUniformHeatmapRenderableSeries()
         heatmapRenderableSeries!.minimum = Double(0)
-        heatmapRenderableSeries!.maximum = maxZ
+        heatmapRenderableSeries!.maximum = maxZ / 2
         heatmapRenderableSeries!.dataSeries = heatmapDataSeries
         
          //add colors
-//        let stops = [NSNumber(value: 0.0), NSNumber(value: 1)]
-//        let colors = [UIColor.fromARGBColorCode(0xFF000000)!,UIColor.fromARGBColorCode(0xFFc5c5c5)!]
-//        heatmapRenderableSeries!.colorMap = SCIColorMap.init(colors: colors, andStops: stops)
+        let stops = [NSNumber(value: 0.0), NSNumber(value: 1)]
+        let colors = [UIColor.fromARGBColorCode(0xFF000000)!,UIColor.fromARGBColorCode(0xFFffffff)!]
+        heatmapRenderableSeries!.colorMap = SCIColorMap.init(colors: colors, andStops: stops)
     }
     
 
     
     private func addEventListeners () {
         // Register a VisibleRangeChanged callback
+        
         xAxis!.registerVisibleRangeChangedCallback { (newRange, oldRange, isAnimated, sender) in
             
             if self.loaded {
@@ -190,7 +186,7 @@ class Heatmap {
                 self.endDate = max
 
                 self._timer?.invalidate()
-                self._timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { timer in
+                self._timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: false) { timer in
                     self.render()
                 }
             }
@@ -202,27 +198,23 @@ class Heatmap {
     func render () {
 //        DispatchQueue(label: "recalc").async {
             SCIUpdateSuspender.usingWithSuspendable(self.sciChartSurface, with: {
+                self.clear()
                 self.heatmapDataSeries?.startX = SCIGeneric(self.startDate)
                 self.heatmapDataSeries?.stepX = SCIGeneric(self.timeResolution)
-                self.clear()
                 self.accumulate()
                 // self.normalize()
-                self.getMax()
+                 self.getMax()
             })
 //        }
     }
-    
-//    @objc func resample (_ timer: Timer) {
-//        render()
-//    }
     
     
     // calculate heatmap props
     private func getChartProps () {
         var startD: Int32 = 0
         var endD: Int32 = 0
-        var minP: Float = 0.0
-        var maxP: Float = 0.0
+        var minP: Int32 = 0
+        var maxP: Int32 = 0
         
         for (key, _) in data! {
             let dates = getMinMaxDates(orderbook: data![key]!)
@@ -255,7 +247,7 @@ class Heatmap {
     
     
     // get price range
-    private func getMinMaxPrice(orderbook: [OrderBook]) -> [String: Float] {
+    private func getMinMaxPrice(orderbook: [OrderBook]) -> [String: Int32] {
         let maxPrice = orderbook.map({$0.asks.last!.price}).max()!
         let minPrice = orderbook.map({$0.bids.last!.price}).min()!
         
@@ -266,6 +258,7 @@ class Heatmap {
     
     // clear
     private func clear () {
+        NSLog("clear started")
         for x in 0..<width {
             for y in 0..<height {
                 heatmapDataSeries?.updateZ(atXIndex: x, yIndex: y, withValue: zero)
@@ -274,3 +267,16 @@ class Heatmap {
     }
 }
 
+    // normalize with logarithm
+//    private func normalize () {
+//        for x in 0..<width {
+//            for y in 0..<height {
+//                let currValue = zValues!.valueAt(x: x, y: y).doubleData
+//                if (currValue > 0) {
+//                    let v = log(currValue + 1)
+//                    maxZ = v > maxZ ? v : maxZ
+//                    heatmapDataSeries?.updateZ(atXIndex: x, yIndex: y, withValue: SCIGeneric(v))
+//                }
+//            }
+//        }
+//    }
