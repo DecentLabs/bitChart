@@ -48,10 +48,8 @@ class ViewController: UIViewController {
         
         
         // get exchange names
-        var i = 0
         for (name, _) in data {
-            exchangeList.append(["tag": i, "name": name])
-            i += 1
+            exchangeList.append(name)
         }
         
         // create checkboxes
@@ -61,13 +59,14 @@ class ViewController: UIViewController {
             checkmark.frame = CGRect(x: Int(20 + chartWidth!), y: b * btnSize + 40, width: btnSize, height: btnSize)
             checkmark.setImage(UIImage(named:"Checkmarkempty"), for: .normal)
             checkmark.setImage(UIImage(named:"Checkmark"), for: .selected)
-            checkmark.isSelected = true
-            checkmark.tag = b
+            checkmark.isSelected = false
             checkmark.addTarget(self, action: Selector(("checkMarkTapped:")), for:.touchUpInside)
             self.view.addSubview(checkmark)
-            let name = exchangeList.filter({$0["tag"] as! Int == b})[0]["name"] // todo
-            checked.append(name as! String)
+            buttons.append(checkmark)
         }
+        
+        buttons[0].isSelected = true
+        checked.append(exchangeList[0])
         
         // draw chart
         heatmap = Heatmap(sciChartSurface: sciChartSurface!, _data: data, exchangeList: checked)
@@ -81,18 +80,19 @@ class ViewController: UIViewController {
             self.createSpinnerView()
         }) { (success) in
             UIView.animate(withDuration: 0.2, delay: 0, options: .curveLinear, animations: {
-                sender.isSelected = !sender.isSelected
+                for button in buttons {
+                    button.isSelected = false
+                }
+                sender.isSelected = true
                 sender.transform = .identity
             }, completion: { _ in
-                let i = sender.tag
-                let name = exchangeList.filter({$0["tag"] as! Int == i})[0]["name"] as! String // todo
+                let index = buttons.firstIndex(of: sender)
+                let name = exchangeList[index!]
                 
                 // update exchange list
-                if (!sender.isSelected) {
-                    checked = checked.filter({$0 != name})
-                } else {
-                    checked.append(name)
-                }
+                checked = []
+                checked.append(name)
+                
                 // redraw chart
                 heatmap!.filterData(list: checked)
                 heatmap!.render()

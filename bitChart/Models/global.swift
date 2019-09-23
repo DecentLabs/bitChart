@@ -13,11 +13,12 @@ import SciChart
 
 let data = getExchangeData()
 
-var exchangeList: [[String: Any]] = []
+var exchangeList: [String] = []
 var checked: [String] = []
 
 var sciChartSurface: SCIChartSurface?
 var heatmap: Heatmap?
 
 var chartWidth: CGFloat?
+var buttons = [UIButton]()
 
