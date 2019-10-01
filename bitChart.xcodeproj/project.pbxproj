@@ -7,10 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7A1E0911233D057000D3D0A8 /* dataControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1E0910233D057000D3D0A8 /* dataControllerDelegate.swift */; };
 		7A20E36B231FF71E00716936 /* transformData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A20E36A231FF71E00716936 /* transformData.swift */; };
 		7A20E36D2320075800716936 /* linechart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A20E36C2320075800716936 /* linechart.swift */; };
 		7A20E36F2320081700716936 /* dateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A20E36E2320081700716936 /* dateFormatter.swift */; };
 		7A20E3712326549C00716936 /* orderbook2.csv in Resources */ = {isa = PBXBuildFile; fileRef = 7A20E3702326549C00716936 /* orderbook2.csv */; };
+		7A224B77234362E00003CA00 /* series.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A224B76234362E00003CA00 /* series.swift */; };
 		7A84A8B3231D4FF900502BA1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A84A8B2231D4FF900502BA1 /* AppDelegate.swift */; };
 		7A84A8B5231D4FF900502BA1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A84A8B4231D4FF900502BA1 /* ViewController.swift */; };
 		7A84A8B8231D4FF900502BA1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7A84A8B6231D4FF900502BA1 /* Main.storyboard */; };
@@ -60,10 +62,12 @@
 
 /* Begin PBXFileReference section */
 		5F127A3FFB8F8246736934D4 /* Pods_bitChart.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_bitChart.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7A1E0910233D057000D3D0A8 /* dataControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dataControllerDelegate.swift; sourceTree = "<group>"; };
 		7A20E36A231FF71E00716936 /* transformData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = transformData.swift; sourceTree = "<group>"; };
 		7A20E36C2320075800716936 /* linechart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = linechart.swift; sourceTree = "<group>"; };
 		7A20E36E2320081700716936 /* dateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dateFormatter.swift; sourceTree = "<group>"; };
 		7A20E3702326549C00716936 /* orderbook2.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = orderbook2.csv; sourceTree = "<group>"; };
+		7A224B76234362E00003CA00 /* series.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = series.swift; sourceTree = "<group>"; };
 		7A84A8AF231D4FF900502BA1 /* bitChart.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = bitChart.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A84A8B2231D4FF900502BA1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; usesTabs = 1; };
 		7A84A8B4231D4FF900502BA1 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -162,6 +166,7 @@
 				7A20E36A231FF71E00716936 /* transformData.swift */,
 				7A20E36C2320075800716936 /* linechart.swift */,
 				7AEEA38F232A908C004952EC /* heatmap.swift */,
+				7A224B76234362E00003CA00 /* series.swift */,
 			);
 			path = bitChart;
 			sourceTree = "<group>";
@@ -197,6 +202,7 @@
 			isa = PBXGroup;
 			children = (
 				7AEEA3972333B8EE004952EC /* global.swift */,
+				7A1E0910233D057000D3D0A8 /* dataControllerDelegate.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -407,6 +413,8 @@
 			files = (
 				7AEEA3982333B8EE004952EC /* global.swift in Sources */,
 				7AEEA39C2333CA36004952EC /* spinnerViewController.swift in Sources */,
+				7A224B77234362E00003CA00 /* series.swift in Sources */,
+				7A1E0911233D057000D3D0A8 /* dataControllerDelegate.swift in Sources */,
 				7A20E36F2320081700716936 /* dateFormatter.swift in Sources */,
 				7A20E36D2320075800716936 /* linechart.swift in Sources */,
 				7A20E36B231FF71E00716936 /* transformData.swift in Sources */,

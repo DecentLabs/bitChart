@@ -95,7 +95,7 @@ class ViewController: UIViewController {
                 
                 // redraw chart
                 heatmap!.filterData(list: checked)
-                heatmap!.render()
+                // heatmap!.render() todo
             })
         }
     }
