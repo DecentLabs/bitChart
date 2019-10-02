@@ -17,7 +17,7 @@ var exchangeList: [String] = []
 var checked: [String] = []
 
 var sciChartSurface: SCIChartSurface?
-var heatmap: Heatmap?
+var chart: Chart?
 
 var chartWidth: CGFloat?
 var buttons = [UIButton]()

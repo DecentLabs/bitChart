@@ -69,8 +69,8 @@ class ViewController: UIViewController {
         checked.append(exchangeList[0])
         
         // draw chart
-        heatmap = Heatmap(sciChartSurface: sciChartSurface!, _data: data, exchangeList: checked)
-        heatmap!.start()
+        chart = Chart(sciChartSurface: sciChartSurface!, _data: data, exchangeList: checked)
+        chart!.start()
     }
     
     // ccheckmark tapped
@@ -93,9 +93,8 @@ class ViewController: UIViewController {
                 checked = []
                 checked.append(name)
                 
-                // redraw chart
-                heatmap!.filterData(list: checked)
-                // heatmap!.render() todo
+                // redraw chart TODO
+                chart!.update(list: checked)
             })
         }
     }
