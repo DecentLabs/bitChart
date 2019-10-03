@@ -93,7 +93,6 @@ class ViewController: UIViewController {
                 checked = []
                 checked.append(name)
                 
-                // redraw chart TODO
                 chart!.update(list: checked)
             })
         }

@@ -4,9 +4,8 @@
 //
 //  Created by brigitta forrai on 2019. 09. 04..
 //  Copyright © 2019. brigitta forrai. All rights reserved.
-//
-//
-// REFACT WIP
+
+
 
 import Foundation
 import SciChart
@@ -36,24 +35,24 @@ class Chart {
     var secondary: Heatmap?
     var chartProps: ChartProps?
     
-    let queue = DispatchQueue(label: "update")
+    let queue = DispatchQueue(label: "addSecondaryHeatmap")
     var workItem: DispatchWorkItem?
     
     init(sciChartSurface: SCIChartSurface, _data: [String : [OrderBook]], exchangeList: [String]) {
         self.sciChartSurface = sciChartSurface
+        // todo data refact
         self._data = _data
         self.exchangeList = exchangeList
         self.data = _data.filter({exchangeList.contains($0.key)})
         
         self.chartProps = getChartProps() // todo
         self.base = Heatmap(data: self.data!, props: self.chartProps!, res: self.timeResolution)
-        self.secondary = Heatmap(data: self.data!, props: self.chartProps!, res: self.timeResolution)
     }
     
     func start () {
         SCIUpdateSuspender.usingWithSuspendable(sciChartSurface) {
             
-            DispatchQueue(label: "addBaseChart").async {
+            DispatchQueue(label: "addBaseHeatmap").async {
                 self.base!.create()
 
                 DispatchQueue.main.async {
@@ -67,8 +66,64 @@ class Chart {
         }
     }
     
-    func getChartProps () -> ChartProps {
+    private func addEventListeners () {
+        xAxis!.registerVisibleRangeChangedCallback { (newRange, oldRange, isAnimated, sender) in
+            if self.loaded {
+                
+                self.secondary?.shouldUpdate = false
+                self.workItem?.cancel()
+                
+                self.workItem = DispatchWorkItem {
+                    let min = Int32(newRange!.min.doubleData)
+                    let max = Int32(newRange!.max.doubleData)
+                    let renderSecondary = (self.chartProps!.startDate != min) && (self.chartProps!.endDate != max)
+                    
+                    if renderSecondary {
+                      self.createSecondary(min: min, max: max, props: self.chartProps!)
+                    }
+
+                    if self.secondary!.isUpdated {
+                        DispatchQueue.main.async {
+                            print("update ui")
+                            
+                            if (self.sciChartSurface.renderableSeries.count() > 1) {
+                                self.sciChartSurface.renderableSeries.remove(at: 1)
+                            }
+                            self.sciChartSurface.renderableSeries.add(self.secondary?.heatmapRenderableSeries)
+                        }
+                    }
+                }
+                
+                self.queue.async(execute: self.workItem!)
+            }
+            self.loaded = true
+        }
+    }
+    
+    
+    private func createAxises () {
+        // create xy axis
+        xAxis = SCINumericAxis()
+        xAxis!.axisTitle = "Time"
+        xAxis?.visibleRangeLimit = SCIIntegerRange(min: SCIGeneric(chartProps!.startDate), max: SCIGeneric(chartProps!.endDate)) // todo update
+        sciChartSurface.xAxes.add(xAxis)
         
+        yAxis = SCINumericAxis()
+        yAxis!.axisTitle = "Price"
+        yAxis?.visibleRangeLimit = SCIDoubleRange(min: SCIGeneric(chartProps!.minPrice), max: SCIGeneric(chartProps!.maxPrice))
+        sciChartSurface.yAxes.add(yAxis)
+    }
+    
+    private func addModifiers () {
+        // pan + zoom
+        sciChartSurface.chartModifiers = SCIChartModifierCollection(childModifiers: [
+            SCIPinchZoomModifier(),
+            SCIZoomPanModifier(),
+            SCIZoomExtentsModifier()
+        ])
+    }
+    
+    private func getChartProps () -> ChartProps {
         var startD: Int32 = 0
         var endD: Int32 = 0
         var minP: Int32 = 0
@@ -97,62 +152,6 @@ class Chart {
         )
     }
     
-    
-    
-      private func addEventListeners () {
-            xAxis!.registerVisibleRangeChangedCallback { (newRange, oldRange, isAnimated, sender) in
-                if self.loaded {
-                    
-                    self.secondary!.shouldUpdate = false
-                    self.workItem?.cancel()
-                    
-                    self.workItem = DispatchWorkItem {
-                        let min = Int32(newRange!.min.doubleData)
-                        let max = Int32(newRange!.max.doubleData)
-                        self.createSecondary(min: min, max: max, props: self.chartProps!)
-
-                        
-                        if self.secondary!.isUpdated {
-                            DispatchQueue.main.async {
-                                print("update ui")
-                                
-                                if (self.sciChartSurface.renderableSeries.count() > 1) {
-                                    self.sciChartSurface.renderableSeries.remove(at: 1)
-                                }
-                                self.sciChartSurface.renderableSeries.add(self.secondary!.heatmapRenderableSeries)
-                            }
-                        }
-                    }
-                    
-                    self.queue.async(execute: self.workItem!)
-                }
-                self.loaded = true
-            }
-        }
-    
-    
-     // create xy axis
-    private func createAxises () {
-        xAxis = SCINumericAxis()
-        xAxis!.axisTitle = "Time"
-        xAxis?.visibleRangeLimit = SCIIntegerRange(min: SCIGeneric(chartProps!.startDate), max: SCIGeneric(chartProps!.endDate)) // todo update
-        sciChartSurface.xAxes.add(xAxis)
-        
-        yAxis = SCINumericAxis()
-        yAxis!.axisTitle = "Price"
-        yAxis?.visibleRangeLimit = SCIDoubleRange(min: SCIGeneric(chartProps!.minPrice), max: SCIGeneric(chartProps!.maxPrice))
-        sciChartSurface.yAxes.add(yAxis)
-    }
-    
-    // add chart modifiers (pan + zoom)
-    private func addModifiers () {
-        sciChartSurface.chartModifiers = SCIChartModifierCollection(childModifiers: [
-            SCIPinchZoomModifier(),
-            SCIZoomPanModifier(),
-            SCIZoomExtentsModifier()
-        ])
-    }
-    
     private func getMinMaxDates(orderbook: [OrderBook]) -> [String: Int32] {
         let startDate = Int32(dateToTimestamp(date: orderbook.first!.timestamp))
         let endDate = Int32(dateToTimestamp(date: orderbook.last!.timestamp))
@@ -160,14 +159,13 @@ class Chart {
     }
     
     
-    // get price range
     private func getMinMaxPrice(orderbook: [OrderBook]) -> [String: Int32] {
         let maxPrice = orderbook.map({$0.asks.last!.price}).max()!
         let minPrice = orderbook.map({$0.bids.last!.price}).min()!
         return ["minPrice": minPrice, "maxPrice": maxPrice]
     }
     
-    func createSecondary (min: Int32, max: Int32, props: ChartProps) {
+    private func createSecondary (min: Int32, max: Int32, props: ChartProps) {
         let duration = max - min
         let res = duration / props.width
         var p = props
@@ -179,7 +177,6 @@ class Chart {
     
     
     func update (list: [String]) {
-        // data todo
         exchangeList = list
         data = _data.filter({exchangeList.contains($0.key)})
         self.chartProps = getChartProps()
@@ -199,7 +196,6 @@ class Chart {
                     self.createSecondary(min: min, max: max, props: self.chartProps!)
                 }
             
-                // add to ui
                 DispatchQueue.main.async {
                     self.sciChartSurface.renderableSeries.clear()
                     self.sciChartSurface.renderableSeries.add(self.base!.heatmapRenderableSeries)
