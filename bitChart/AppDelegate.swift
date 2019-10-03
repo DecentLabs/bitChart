@@ -18,18 +18,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+		
         
         // Note! This is just an example.
         // The real License Contract is found by following steps above
-        let licenseCode:String = ProcessInfo.processInfo.environment["SCICHART_LICENSE"] ?? ""
         let licencing:String = "<LicenseContract>" +
             "<Customer>brigittaforrai@decent.org</Customer>" +
             "<OrderId>Trial</OrderId>" +
             "<LicenseCount>1</LicenseCount>" +
             "<IsTrialLicense>true</IsTrialLicense>" +
-            "<SupportExpires>10/02/2019 00:00:00</SupportExpires>" +
+            "<SupportExpires>11/02/2019 00:00:00</SupportExpires>" +
             "<ProductCode>SC-IOS-2D-ENTERPRISE-SRC</ProductCode>" +
-        "<KeyCode>" + licenseCode + "</KeyCode>" +
+        "<KeyCode>" + "11beb379fe2437ebc851c75af31e6d86a553702eeb0974fb1157e7414ffde8d7c6ab5ab0b9899e08a6062c07edf9be93faa49bbc2ffcf15941204ca710286d0c46889e13df64a93610fb73d7cc6049120819cd7b84077e20ab3df0834fe5da687b4fd02ec307dc6e69729aadc73f62eea9105c9c0ff0d31b73f0c95807e20aef04b684d097024cde9bba7db729e0630ea44a6f92f13fde3d6c97c5734730ff96cded57f36d70c76d93ad5a81817c7491c2b3abdb8d95cf36" + "</KeyCode>" +
         "</LicenseContract>"
         
         SCIChartSurface.setRuntimeLicenseKey(licencing)
