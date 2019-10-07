@@ -202,6 +202,7 @@ class Chart {
                     if renderSecondary {
                         self.sciChartSurface.renderableSeries.add(self.secondary!.heatmapRenderableSeries)
                     }
+                    isLoading.loading = false
                 }
             }
         }

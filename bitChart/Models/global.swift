@@ -22,3 +22,16 @@ var chart: Chart?
 var chartWidth: CGFloat?
 var buttons = [UIButton]()
 
+
+class IsLoading {
+    var loading: Bool = false {
+        willSet(newVal) {
+            print(newVal, "new")
+        }
+        didSet (oldVal) {
+            print(oldVal, "old")
+        }
+    }
+}
+var isLoading = IsLoading()
+

@@ -12,23 +12,23 @@ import Foundation
 
 class ViewController: UIViewController {
     
-    func createSpinnerView() {
-        let child = SpinnerViewController()
-        
-        // add the spinner view controller
-        addChild(child)
-        child.view.frame = view.frame
-        view.addSubview(child.view)
-        child.didMove(toParent: self)
-        
-        // wait two seconds to simulate some work happening
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            // then remove the spinner view controller
-            child.willMove(toParent: nil)
-            child.view.removeFromSuperview()
-            child.removeFromParent()
-        }
-    }
+//    func createSpinnerView() {
+//        let child = SpinnerViewController()
+//
+//        // add the spinner view controller
+//        addChild(child)
+//        child.view.frame = view.frame
+//        view.addSubview(child.view)
+//        child.didMove(toParent: self)
+//
+//        // wait two seconds to simulate some work happening
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+//            // then remove the spinner view controller
+//            child.willMove(toParent: nil)
+//            child.view.removeFromSuperview()
+//            child.removeFromParent()
+//        }
+//    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -77,7 +77,7 @@ class ViewController: UIViewController {
     @IBAction func checkMarkTapped(_ sender: UIButton) {
         UIView.animate(withDuration: 0.2, delay: 0, options: .curveLinear, animations: {
             sender.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
-            self.createSpinnerView()
+
         }) { (success) in
             UIView.animate(withDuration: 0.2, delay: 0, options: .curveLinear, animations: {
                 for button in buttons {
@@ -85,6 +85,7 @@ class ViewController: UIViewController {
                 }
                 sender.isSelected = true
                 sender.transform = .identity
+                isLoading.loading = true
             }, completion: { _ in
                 let index = buttons.firstIndex(of: sender)
                 let name = exchangeList[index!]
