@@ -33,35 +33,35 @@ class Heatmap {
     }
     
     func create () {
-        print("BEGIN")
+//        print("BEGIN")
         self.isUpdated = false
 
         if shouldUpdate { setupDataSeries() } else {
-            print("STOP")
+//            print("STOP")
             return
         }
         
         if shouldUpdate { clear() } else {
-            print("STOP")
+//            print("STOP")
             return
         }
 
         if shouldUpdate { accumulate() } else {
-            print("STOP")
+//            print("STOP")
             return
         }
         
         if shouldUpdate { getMax() } else {
-            print("STOP")
+//            print("STOP")
             return
         }
         
         if shouldUpdate {
             createRenderableSeries()
             isUpdated = true
-            print("END")
+//            print("END")
         } else {
-            print("STOP")
+//            print("STOP")
             return
         }
     }

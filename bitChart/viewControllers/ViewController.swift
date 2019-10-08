@@ -11,27 +11,12 @@ import SciChart
 import Foundation
 
 class ViewController: UIViewController {
-    
-//    func createSpinnerView() {
-//        let child = SpinnerViewController()
-//
-//        // add the spinner view controller
-//        addChild(child)
-//        child.view.frame = view.frame
-//        view.addSubview(child.view)
-//        child.didMove(toParent: self)
-//
-//        // wait two seconds to simulate some work happening
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-//            // then remove the spinner view controller
-//            child.willMove(toParent: nil)
-//            child.view.removeFromSuperview()
-//            child.removeFromParent()
-//        }
-//    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        handleData(fileName: "orderbook3", type: "csv")
+        
         
         // force landscape orientation
         let value = UIInterfaceOrientation.landscapeLeft.rawValue
@@ -48,7 +33,7 @@ class ViewController: UIViewController {
         
         
         // get exchange names
-        for (name, _) in data {
+        for (name, _) in exchangeData {
             exchangeList.append(name)
         }
         
@@ -69,7 +54,7 @@ class ViewController: UIViewController {
         checked.append(exchangeList[0])
         
         // draw chart
-        chart = Chart(sciChartSurface: sciChartSurface!, _data: data, exchangeList: checked)
+        chart = Chart(sciChartSurface: sciChartSurface!, _data: exchangeData, exchangeList: checked)
         chart!.start()
     }
     

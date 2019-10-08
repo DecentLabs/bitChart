@@ -10,9 +10,6 @@ import Foundation
 import SciChart
 
 
-
-let data = getExchangeData()
-
 var exchangeList: [String] = []
 var checked: [String] = []
 
@@ -26,10 +23,10 @@ var buttons = [UIButton]()
 class IsLoading {
     var loading: Bool = false {
         willSet(newVal) {
-            print(newVal, "new")
+//            print(newVal, "new")
         }
         didSet (oldVal) {
-            print(oldVal, "old")
+//            print(oldVal, "old")
         }
     }
 }

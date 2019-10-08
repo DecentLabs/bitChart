@@ -30,6 +30,7 @@ class Chart {
     var yAxis: SCINumericAxis?
     var loaded = false
     var timeResolution = Int32(60 * 60) // hourly
+//    var timeResolution = Int32(60)
     
     var base: Heatmap?
     var secondary: Heatmap?
@@ -82,9 +83,9 @@ class Chart {
                       self.createSecondary(min: min, max: max, props: self.chartProps!)
                     }
 
-                    if self.secondary!.isUpdated {
+                    if (self.secondary?.isUpdated ?? false) {
                         DispatchQueue.main.async {
-                            print("update ui")
+//                            print("update ui")
                             
                             if (self.sciChartSurface.renderableSeries.count() > 1) {
                                 self.sciChartSurface.renderableSeries.remove(at: 1)
