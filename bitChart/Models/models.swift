@@ -19,5 +19,15 @@ struct OrderBook {
     let asks: [LimitOrder]
 }
 
+struct ChartProps {
+    let width: Int32
+    let height: Int32
+    let minPrice: Int32
+    let maxPrice: Int32
+    var startDate: Int32
+    let endDate: Int32
+    var timeResolution: Int32
+}
+
 var exchangeData = [String: [OrderBook]]()
 

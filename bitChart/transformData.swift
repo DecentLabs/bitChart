@@ -9,22 +9,19 @@
 import Foundation
 
 
-func handleData (fileName: String, type: String) {
-    guard let filePath = Bundle.main.path(forResource: fileName, ofType: type) else { return }
-    let pathURL = URL(fileURLWithPath: filePath)
-
-    let s = StreamReader(path: pathURL)
+func updateExchangeData(_ row: [Any]) {
     
-    repeat {
-        if let row = s?.next() {
-            let items = parseTypes(row: row)
-            getExchangeData(items)
-        }
-    } while !s!.isAtEOF
-}
+    func parseLimitOrder(row: ArraySlice<Any>, pos: Int, usd: Bool) -> LimitOrder {
+        var floatP: Float = Float(row[pos] as! Double)
+        let q = Float(row[pos + 1] as! Double)
+        let _q = usd ? (q / floatP) : q
+        floatP.round()
+        let p = Int32(floatP)
 
-
-func getExchangeData(_ row: [Any]) {
+        return LimitOrder(price: p, quantity: _q)
+    }
+    
+    
     let count = row.count
     
     let name = row[0] as! String
@@ -41,17 +38,6 @@ func getExchangeData(_ row: [Any]) {
     var bids: [LimitOrder] = []
     bids.reserveCapacity(100)
     
-    func parseLimitOrder(row: ArraySlice<Any>, pos: Int, usd: Bool) -> LimitOrder {
-        var floatP: Float = Float(row[pos] as! Double)
-        let q = Float(row[pos + 1] as! Double)
-        let _q = usd ? (q / floatP) : q
-        floatP.round()
-        let p = Int32(floatP)
-
-        return LimitOrder(price: p, quantity: _q)
-    }
-
-
     for i in 0..<100 {
         let pos = i * 2
         let a = parseLimitOrder(row: asksData, pos: pos + 204, usd: usd)
@@ -66,7 +52,8 @@ func getExchangeData(_ row: [Any]) {
         }
     }
 
-    exchangeData[name, default: []].append(OrderBook(timestamp: date, bids: bids, asks: asks))
+    let orderB = OrderBook(timestamp: date, bids: bids, asks: asks)
+    exchangeData[name, default: []].append(orderB)
 }
 
 func parseTypes(row: [String]) -> [Any] {

@@ -15,14 +15,6 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        handleData(fileName: "orderbook3", type: "csv")
-        
-        
-        // force landscape orientation
-        let value = UIInterfaceOrientation.landscapeLeft.rawValue
-        UIDevice.current.setValue(value, forKey: "orientation")
-        
-        
         // Create a SCIChartSurface. This is a UIView so can be added directly to the UI
         chartWidth = self.view.frame.width - 100
         let chartHeight = self.view.frame.height
@@ -31,11 +23,32 @@ class ViewController: UIViewController {
         sciChartSurface?.translatesAutoresizingMaskIntoConstraints = true
         self.view.addSubview(sciChartSurface!)
         
+        chart = Chart(sciChartSurface: sciChartSurface!)
         
-        // get exchange names
-        for (name, _) in exchangeData {
-            exchangeList.append(name)
+        let fileName = "orderbook3"
+        let fileType = "csv"
+        
+        guard let filePath = Bundle.main.path(forResource: fileName, ofType: fileType) else { return }
+        let pathURL = URL(fileURLWithPath: filePath)
+        let s = StreamReader(path: pathURL)
+        
+        DispatchQueue.global(qos: .background).async {
+            chart!.load(exchangeData)
+            repeat {
+               if let row = s?.next() {
+                    let items = parseTypes(row: row)
+                    updateExchangeData(items)
+               }
+            } while !s!.isAtEOF
+
+            DispatchQueue.main.async {
+                chart!.loaded = true
+                chart!.xAxis?.autoRange = .never
+                chart!.yAxis?.autoRange = .never
+            }
         }
+        
+        
         
         // create checkboxes
         let btnSize = 60
@@ -50,17 +63,17 @@ class ViewController: UIViewController {
             buttons.append(checkmark)
         }
         
-        buttons[0].isSelected = true
-        checked.append(exchangeList[0])
+//        buttons[0].isSelected = true
         
-        // draw chart
-        chart = Chart(sciChartSurface: sciChartSurface!, _data: exchangeData, exchangeList: checked)
-        chart!.start()
+        
+        // force landscape orientation
+        let value = UIInterfaceOrientation.landscapeLeft.rawValue
+        UIDevice.current.setValue(value, forKey: "orientation")
     }
     
     // ccheckmark tapped
     @IBAction func checkMarkTapped(_ sender: UIButton) {
-        UIView.animate(withDuration: 0.2, delay: 0, options: .curveLinear, animations: {
+        UIView.animate(withDuration: 1, delay: 0, options: .curveLinear, animations: {
             sender.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
 
         }) { (success) in
@@ -79,7 +92,7 @@ class ViewController: UIViewController {
                 checked = []
                 checked.append(name)
                 
-                chart!.update(list: checked)
+                chart!.update(data: exchangeData)
             })
         }
     }

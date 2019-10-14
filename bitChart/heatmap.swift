@@ -13,7 +13,6 @@ import SciChart
 class Heatmap {
     var data: [String : [OrderBook]]?
     var props: ChartProps?
-    var timeResolution: Int32
     
     let zero = SCIGeneric(0.0)
     var maxZ: Double = 0
@@ -26,10 +25,9 @@ class Heatmap {
     var zValues: SCIArrayController2D?
     
     
-    init(data: [String : [OrderBook]], props: ChartProps, res: Int32) {
+    init(data: [String : [OrderBook]], props: ChartProps) {
         self.data = data
         self.props = props
-        self.timeResolution = res
     }
     
     func create () {
@@ -73,7 +71,7 @@ class Heatmap {
                                                         sizeX: props!.width,
                                                         y: props!.height,
                                                         startX: SCIGeneric(props!.startDate),
-                                                        stepX: SCIGeneric(timeResolution),
+                                                        stepX: SCIGeneric(props!.timeResolution),
                                                         startY: SCIGeneric(props!.minPrice),
                                                         stepY: SCIGeneric(1))
         zValues = heatmapDataSeries!.zValues()
@@ -95,32 +93,33 @@ class Heatmap {
     
     
     func accumulate () {
-       for (name, exchange) in data! {
+        if props!.width > 0 {
+            for (name, exchange) in data! {
 
-           // loop in orderbook
-           for orderBook in exchange {
-            let x = (Int32(dateToTimestamp(date: orderBook.timestamp)) - props!.startDate) / timeResolution
-               
-               func plot(_ o: LimitOrder) {
-                let y = Int32(o.price - props!.minPrice)
-                   let q = Double(o.quantity)
-                   if (y >= 0 || q > 0) {
-                       var currValue = zValues!.valueAt(x: x, y: y).doubleData
-                       currValue += q
-                       heatmapDataSeries?.updateZ(atXIndex: x, yIndex: y, withValue: SCIGeneric(currValue))
-                   }
-               }
-               
-            if (x >= 0 && x <= props!.width) {
-                   for o in orderBook.asks {
-                       plot(o)
-                   }
-                   for o in orderBook.bids {
-                       plot(o)
-                   }
-               }
-           }
-       }
+                // loop in orderbook
+                for orderBook in exchange {
+                 let x = (Int32(dateToTimestamp(date: orderBook.timestamp)) - props!.startDate) / props!.timeResolution
+                    func plot(_ o: LimitOrder) {
+                     let y = Int32(o.price - props!.minPrice)
+                        let q = Double(o.quantity)
+                        if (y >= 0 || q > 0) {
+                            var currValue = zValues!.valueAt(x: x, y: y).doubleData
+                            currValue += q
+                            heatmapDataSeries?.updateZ(atXIndex: x, yIndex: y, withValue: SCIGeneric(currValue))
+                        }
+                    }
+                    
+                 if (x >= 0 && x <= props!.width) {
+                        for o in orderBook.asks {
+                            plot(o)
+                        }
+                        for o in orderBook.bids {
+                            plot(o)
+                        }
+                    }
+                }
+            }
+        }
    }
     
     

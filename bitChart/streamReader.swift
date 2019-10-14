@@ -56,7 +56,6 @@ class StreamReader {
         
         buffer = Data(capacity: self.chunkSize)
         delimPattern = delimeter.data(using: self.encoding)!
-        
     }
     
     func next() -> [String]? {
