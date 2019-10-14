@@ -15,6 +15,8 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let buttonView = ButtonView()
+        
         // Create a SCIChartSurface. This is a UIView so can be added directly to the UI
         chartWidth = self.view.frame.width - 100
         let chartHeight = self.view.frame.height
@@ -38,6 +40,10 @@ class ViewController: UIViewController {
                if let row = s?.next() {
                     let items = parseTypes(row: row)
                     updateExchangeData(items)
+                
+                    if (Array(exchangeData.keys).count != buttonView.names.count) {
+                       buttonView.names = Array(exchangeData.keys)
+                    }
                }
             } while !s!.isAtEOF
 
@@ -45,26 +51,26 @@ class ViewController: UIViewController {
                 chart!.loaded = true
                 chart!.xAxis?.autoRange = .never
                 chart!.yAxis?.autoRange = .never
+                
+                for btn in buttonView.buttons {
+                    self.view.addSubview(btn)
+                }
             }
         }
         
         
-        
         // create checkboxes
-        let btnSize = 60
-        for (b, _) in exchangeList.enumerated() {
-            let checkmark = UIButton(type: UIButton.ButtonType.custom) as UIButton
-            checkmark.frame = CGRect(x: Int(20 + chartWidth!), y: b * btnSize + 40, width: btnSize, height: btnSize)
-            checkmark.setImage(UIImage(named:"Checkmarkempty"), for: .normal)
-            checkmark.setImage(UIImage(named:"Checkmark"), for: .selected)
-            checkmark.isSelected = false
-            checkmark.addTarget(self, action: Selector(("checkMarkTapped:")), for:.touchUpInside)
-            self.view.addSubview(checkmark)
-            buttons.append(checkmark)
-        }
-        
-//        buttons[0].isSelected = true
-        
+//        let btnSize = 60
+//        for (b, _) in buttonView.names.enumerated() {
+//            let checkmark = UIButton(type: UIButton.ButtonType.custom) as UIButton
+//            checkmark.frame = CGRect(x: Int(20 + chartWidth!), y: b * btnSize + 40, width: btnSize, height: btnSize)
+//            checkmark.setImage(UIImage(named:"Checkmarkempty"), for: .normal)
+//            checkmark.setImage(UIImage(named:"Checkmark"), for: .selected)
+//            checkmark.isSelected = true
+//            checkmark.addTarget(self, action: Selector(("checkMarkTapped:")), for:.touchUpInside)
+//            self.view.addSubview(checkmark)
+//            buttons.append(checkmark)
+//        }
         
         // force landscape orientation
         let value = UIInterfaceOrientation.landscapeLeft.rawValue
@@ -72,30 +78,26 @@ class ViewController: UIViewController {
     }
     
     // ccheckmark tapped
-    @IBAction func checkMarkTapped(_ sender: UIButton) {
-        UIView.animate(withDuration: 1, delay: 0, options: .curveLinear, animations: {
-            sender.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
-
-        }) { (success) in
-            UIView.animate(withDuration: 0.2, delay: 0, options: .curveLinear, animations: {
-                for button in buttons {
-                    button.isSelected = false
-                }
-                sender.isSelected = true
-                sender.transform = .identity
-                isLoading.loading = true
-            }, completion: { _ in
-                let index = buttons.firstIndex(of: sender)
-                let name = exchangeList[index!]
-                
-                // update exchange list
-                checked = []
-                checked.append(name)
-                
-                chart!.update(data: exchangeData)
-            })
-        }
-    }
+//    @IBAction func checkMarkTapped(_ sender: UIButton) {
+//        UIView.animate(withDuration: 1, delay: 0, options: .curveLinear, animations: {
+//            sender.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
+//
+//        }) { (success) in
+//            UIView.animate(withDuration: 0.2, delay: 0, options: .curveLinear, animations: {
+//                sender.isSelected = true
+//                sender.transform = .identity
+//            }, completion: { _ in
+//                let index = buttons.firstIndex(of: sender)
+//                let name = buttonView.names[index!]
+//
+//                // update exchange list
+//                checked = []
+//                checked.append(name)
+//
+//                chart!.update(data: exchangeData)
+//            })
+//        }
+//    }
     
     // force landscape orientation
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
