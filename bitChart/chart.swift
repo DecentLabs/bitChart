@@ -172,16 +172,16 @@ class Chart {
     
     
     func update (data: [String: [OrderBook]]) {
+        DispatchQueue(label: "addHeatmaps").async {
         self.data = data
-        self.chartProps = getChartProps()
+            self.chartProps = self.getChartProps()
         
         let range = self.xAxis?.visibleRange
         let min = Int32(range!.min.doubleData)
         let max = Int32(range!.max.doubleData)
         let renderSecondary = (self.chartProps!.startDate != min) && (self.chartProps!.endDate != max)
 
-        SCIUpdateSuspender.usingWithSuspendable(sciChartSurface) {
-            DispatchQueue(label: "addHeatmaps").async {
+            SCIUpdateSuspender.usingWithSuspendable(self.sciChartSurface) {
                 
                 self.base = Heatmap(data: self.data, props: self.chartProps!)
                 self.base!.create()

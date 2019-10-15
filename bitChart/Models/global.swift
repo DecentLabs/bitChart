@@ -10,65 +10,72 @@ import Foundation
 import SciChart
 
 
-var checked: [String] = []
-
 var sciChartSurface: SCIChartSurface?
 var chart: Chart?
 
 var chartWidth: CGFloat?
-var buttons = [UIButton]()
-
 let btnSize = 60
 
 
 class ButtonView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
+        setupView()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-//        fatalError("init(coder:) has not been implemented")
+        setupView()
     }
     
-    var buttons = [UIButton]()
+    private func setupView() {
+      backgroundColor = .darkGray
+    }
+
+    var list: [String] = [] {
+        willSet(newVal) {
+            createCheckmark(newVal)
+        }
+    }
     
-    var names: [String] = [] {
-        willSet(newVal) {
-            self.createCheckmark(newVal)
-        }
-    }
-    var checked: [String] = [] {
-        willSet(newVal) {
-            print(newVal, "new")
-        }
-    }
+    var checked: [String] = []
     
     func createCheckmark (_ newVal: [String]) {
-        for (b, _) in newVal.enumerated() {
+        checked = []
+        for (b, name) in newVal.enumerated() {
             let checkmark = UIButton(type: UIButton.ButtonType.custom) as UIButton
             checkmark.frame = CGRect(x: 0, y: b * btnSize + 40, width: btnSize, height: btnSize)
             checkmark.setImage(UIImage(named:"Checkmarkempty"), for: .normal)
             checkmark.setImage(UIImage(named:"Checkmark"), for: .selected)
             checkmark.isSelected = true
-//            checkmark.addTarget(self, action: Selector(("checkMarkTapped:")), for:.touchUpInside)
-            buttons.append(checkmark)
-            
-            print(buttons)
+            checkmark.accessibilityLabel = name
+            checkmark.addTarget(self, action: Selector(("checkmarkTapped:")), for:.touchUpInside)
+            checked.append(name)
+            addSubview(checkmark)
         }
     }
-}
-
-
-class IsLoading {
-    var loading: Bool = false {
-        willSet(newVal) {
-
-        }
-        didSet (oldVal) {
-
-        }
+    
+     // ccheckmark tapped
+    @IBAction func checkmarkTapped(_ sender: UIButton) {
+        UIView.animate(withDuration: 0.2, delay: 0, options: .curveLinear, animations: {
+            sender.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
+        }) { (success) in
+            UIView.animate(withDuration: 0.2, delay: 0, options: .curveLinear, animations: {
+                sender.isSelected = !sender.isSelected
+                sender.transform = .identity
+            }, completion: { _ in
+                let name = sender.accessibilityLabel
+                if let index = self.checked.firstIndex(of: name!) {
+                    self.checked.remove(at: index)
+                } else {
+                    self.checked.append(name!)
+                }
+                
+                let data = exchangeData.filter({self.checked.contains($0.key)})
+                chart?.update(data: data)
+            }
+        )}
     }
+    
 }
-var isLoading = IsLoading()
 
